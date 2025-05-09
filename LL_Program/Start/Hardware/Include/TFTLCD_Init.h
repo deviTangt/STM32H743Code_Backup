@@ -1,4 +1,4 @@
-#ifndef __LCD_INIT_H
+#ifndef __LCD_INIT_H // begin of __LCD_INIT_H
 #define __LCD_INIT_H
 
 #include "main.h"
@@ -47,7 +47,8 @@ void LCD_WR_DATA(uint16_t dat);//写入两个字节
 void LCD_WR_REG(uint8_t dat);//写入一个指令
 void LCD_Address_Set(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2);//设置坐标函数
 void LCD_Init(void);//LCD初始化
-#endif
+
+#endif // end of __LCD_INIT_H
 
 
 

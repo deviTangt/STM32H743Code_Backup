@@ -105,20 +105,19 @@ int main(void)
   PeriphCommonClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+  MX_TIM7_Init(); //! Enable BspTick Timer
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_TIM7_Init();
   MX_UART7_Init();
   MX_ADC3_Init();
   /* USER CODE BEGIN 2 */
   TJC_PagaInit();
   printf_s(21, "It's MyGo!!!!!");
 
-#if __HARDWARE_CONFIG__TFTLCD_ENABLE__
+#if __HARDWARE_CONFIG__TFTLCD_ENABLE__ // begin of __HARDWARE_CONFIG__TFTLCD_ENABLE__
   LCD_Init();
 	LCD_Fill(0, 0, LCD_W, LCD_H, WHITE);
   LCD_ShowPicture(0, 0, 128, 134, gImage_HuaXiaoKe);
@@ -140,7 +139,8 @@ int main(void)
    
 
     //*******************************// delay                  //************************************//
-    delay_ms(10);                                                                                                                                                                                                                                                                              
+    delay_ms(10);                                       
+                                                                                                                                                                                                                                           
   }
   /* USER CODE END 3 */
 }

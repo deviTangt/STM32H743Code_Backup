@@ -1,5 +1,5 @@
 #include "__HARDWARE_CONFIG__.h"
-#if __HARDWARE_CONFIG__LED_ENABLE__
+#if __HARDWARE_CONFIG__LED_ENABLE__ // begin of __HARDWARE_CONFIG__TFTLCD_ENABLE__
 //*******************************// include _h files    //************************************//
 #include "LED.h"
 //*******************************// define parameters   //************************************//
@@ -47,4 +47,4 @@ inline void LED_TURN(){
 }
 
 //*******************************// end_c               //************************************//
-#endif
+#endif // end of __HARDWARE_CONFIG__TFTLCD_ENABLE__

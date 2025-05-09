@@ -52,7 +52,9 @@ void MX_TIM7_Init(void)
   LL_TIM_SetTriggerOutput(TIM7, LL_TIM_TRGO_RESET);
   LL_TIM_DisableMasterSlaveMode(TIM7);
   /* USER CODE BEGIN TIM7_Init 2 */
-  bsp_Timer_Init();
+  #if __HARDWARE_CONFIG__BSP_TIMER_ENABLE__ // begin of __HARDWARE_CONFIG__BSP_TIMER_ENABLE__
+    bsp_Timer_Init(); //! Enable BspTick Timer
+  #endif // end of __HARDWARE_CONFIG__BSP_TIMER_ENABLE__
   /* USER CODE END TIM7_Init 2 */
 
 }

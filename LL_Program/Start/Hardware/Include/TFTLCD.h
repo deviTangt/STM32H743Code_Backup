@@ -1,4 +1,4 @@
-#ifndef __LCD_H
+#ifndef __LCD_H // begin of __LCD_H
 #define __LCD_H		
 #include "main.h"
 
@@ -46,7 +46,7 @@ void LCD_ShowPicture(uint16_t x,uint16_t y,uint16_t length,uint16_t width,const 
 #define LGRAYBLUE        0XA651 //浅灰蓝色(中间层颜色)
 #define LBBLUE           0X2B12 //浅棕蓝色(选择条目的反色)
 
-#endif
+#endif // end of __LCD_H
 
 
 

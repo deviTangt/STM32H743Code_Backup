@@ -1,5 +1,5 @@
-#include "__HARDWARE_CONFIG__.h"
-#if __HARDWARE_CONFIG__TJC_USART_ENABLE__
+#include "__HARDWARE_CONFIG__.h" 
+#if __HARDWARE_CONFIG__TJC_USART_ENABLE__ // begin of __HARDWARE_CONFIG__TFTLCD_ENABLE__
 //*******************************// include _h files    //************************************//
 #include "TJC_USART.h"
 //*******************************// define parameters   //************************************//
@@ -7,14 +7,14 @@
 
 uint32_t i;
 static char String_Temp[STRING_MAX_LENGTH];
-#if __HARDWARE_CONFIG__TJC_DMA_ENABLE__
+#if __HARDWARE_CONFIG__TJC_DMA_ENABLE__ // begin of __HARDWARE_CONFIG__TJC_DMA_ENABLE__
 	char DMA_TX_BUF[DMA_TX_BUF_MAX] __attribute__((section(".ARM.__at_0x24000000")));
 	char DMA_RX_BUF[DMA_RX_BUF_MAX] __attribute__((section(".ARM.__at_0x24000100")));
-#endif
+#endif // end of __HARDWARE_CONFIG__TJC_DMA_ENABLE__
 
 //*******************************// define function     //************************************//
 
-#if __HARDWARE_CONFIG__TJC_FPUTC_ENABLE__
+#if __HARDWARE_CONFIG__TJC_FPUTC_ENABLE__  // begin of __HARDWARE_CONFIG__TJC_FPUTC_ENABLE__
 //-----------------------------------------------------------------
 // int fputc(int ch, FILE* stream)
 //-----------------------------------------------------------------
@@ -31,7 +31,7 @@ int fputc(int ch, FILE* stream){
     LL_USART_TransmitData8(TJC_HDMI_UART, (uint8_t)ch);
     return ch;
 }
-#endif
+#endif // end of __HARDWARE_CONFIG__TJC_FPUTC_ENABLE__
 //-----------------------------------------------------------------
 // inline void TJC_PagaInit()
 //-----------------------------------------------------------------
@@ -229,7 +229,7 @@ void TJC_SendTxt_SHOW_s(uint8_t WindowIndex, char *format, ...){
 	TJC_SendString_n("\"\xff\xff\xff", 4);
 }
 
-#if __HARDWARE_CONFIG__TJC_DMA_ENABLE__
+#if __HARDWARE_CONFIG__TJC_DMA_ENABLE__ // begin of __HARDWARE_CONFIG__TJC_DMA_ENABLE__
 //-----------------------------------------------------------------
 // void DMA_TJC_UART_UART_Init()
 //-----------------------------------------------------------------
