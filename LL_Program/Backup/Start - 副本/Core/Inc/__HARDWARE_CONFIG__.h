@@ -1,0 +1,26 @@
+#ifndef __HARDWARE_CONFIG_H__
+#define __HARDWARE_CONFIG_H__
+//*******************************// include extern .h files //************************************//
+//*******************************// define statement        //************************************//
+
+#define __HARDWARE_CONFIG__BSP_TIMER_ENABLE__           1       // 启用板级支持包基本定时器tim7
+
+#define __HARDWARE_CONFIG__LED_ENABLE__                 1       // 启用LED.h
+#define __HARDWARE_CONFIG__KEY_ENABLE__                 1       // 启用KEY.h
+
+#define __HARDWARE_CONFIG__TJC_USART_ENABLE__           1       // 启用TJC_USART.h
+#define TJC_HDMI_UART                                   UART7       
+    #define __HARDWARE_CONFIG__TJC_FPUTC_ENABLE__           0       // 启用TJC_USART.h重定向fputc功能
+    #define __HARDWARE_CONFIG__TJC_printf_sn_ENABLE__       1       // 启用TJC_USART.h重定义printf_s和printf_n功能
+    #define __HARDWARE_CONFIG__TJC_RX_ENABLE__              0       // 启用TJC_USART接收中断
+    #define __HARDWARE_CONFIG__TJC_DMA_ENABLE__             1       // 启用TJC_USART DMA模式
+
+#define __HARDWARE_CONFIG__TFTLCD_ENABLE__              1       // 启用TFTLCD.h、TFTLCD_Init.h
+
+
+//*******************************// extern parameters       //************************************//
+//*******************************// define structure unity  //************************************//
+//*******************************// define parameters       //************************************//
+//*******************************// extern function         //************************************//
+//*******************************// end_h                   //************************************//
+#endif

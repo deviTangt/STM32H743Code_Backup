@@ -1,0 +1,38 @@
+#include "__HARDWARE_CONFIG__.h"
+#if __HARDWARE_CONFIG__BSP_TIMER_ENABLE__
+#ifndef  __BSP_TIMER_H
+#define  __BSP_TIMER_H
+#ifdef  __cplusplus
+extern "C"{
+#endif
+//*******************************// include extern .h files //************************************//
+#include "main.h"
+//*******************************// define statement        //************************************//
+
+#define bsp_IMx         TIM7				//宏定义方便替换定时器
+#define bsp_us          (bsp_IMx->CNT + bspTick * 0xffff) 
+#define bsp_ms          (bsp_us / 1000) 
+#define bsp_sec         (bsp_ms / 1000) 
+#define bsp_min         (bsp_sec / 60) 
+#define bsp_hour        (bsp_min / 60) 
+
+//*******************************// extern parameters       //************************************//
+
+extern volatile uint32_t bspTick;
+
+//*******************************// define structure unity  //************************************//
+//*******************************// define parameters       //************************************//
+//*******************************// extern function         //************************************//
+
+extern inline void bsp_Timer_Init(void);
+extern inline uint32_t Get_SystemTimer(void);
+extern inline void Update_SystemTick(void);
+extern inline void delay_ms(uint32_t cnt);
+extern inline void delay_us(uint32_t cnt);
+
+#ifdef  __cplusplus
+}
+#endif
+//*******************************// end_h                   //************************************//
+#endif 
+#endif

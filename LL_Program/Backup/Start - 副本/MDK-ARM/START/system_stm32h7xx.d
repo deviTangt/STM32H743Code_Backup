@@ -1,0 +1,11 @@
+start\system_stm32h7xx.o: ..\Core\Src\system_stm32h7xx.c
+start\system_stm32h7xx.o: ../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h
+start\system_stm32h7xx.o: ../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h743xx.h
+start\system_stm32h7xx.o: ../Drivers/CMSIS/Include/core_cm7.h
+start\system_stm32h7xx.o: D:\Software\Program_Software\MicroelectricalControlUnit\Keil-ARM\Core\ARM\ARMCC\Bin\..\include\stdint.h
+start\system_stm32h7xx.o: ../Drivers/CMSIS/Include/cmsis_version.h
+start\system_stm32h7xx.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
+start\system_stm32h7xx.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
+start\system_stm32h7xx.o: ../Drivers/CMSIS/Include/mpu_armv7.h
+start\system_stm32h7xx.o: ../Drivers/CMSIS/Device/ST/STM32H7xx/Include/system_stm32h7xx.h
+start\system_stm32h7xx.o: D:\Software\Program_Software\MicroelectricalControlUnit\Keil-ARM\Core\ARM\ARMCC\Bin\..\include\math.h
