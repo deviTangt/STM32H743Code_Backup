@@ -11,13 +11,15 @@
 #define __HARDWARE_CONFIG__KEY_ENABLE__                 1       // 启用KEY.h 
 
 #define __HARDWARE_CONFIG__TJC_USART_ENABLE__           1       //! 启用TJC_USART.h
+    #define __HARDWARE_CONFIG__TJC_PAGE_CLEAR_ENABLE__      1       // 启用TJC_USART初始化页面刷新功能
+        #define __HARDWARE_CONFIG__TJC_PAGE_JUMP_ENABLE__       1       // 启用TJC_USART初始化页面跳转功能
     #define __HARDWARE_CONFIG__TJC_FPUTC_ENABLE__           0       // 启用TJC_USART.h重定向fputc功能
     #define __HARDWARE_CONFIG__TJC_printf_sn_ENABLE__       1       //? 启用TJC_USART.h重定义printf_s和printf_n功能
     #define __HARDWARE_CONFIG__TJC_printf_ENABLE__          1       //? 启用TJC_USART.h重定义printf功能
     #define __HARDWARE_CONFIG__TJC_RX_ENABLE__              0       // 启用TJC_USART接收中断
     #define __HARDWARE_CONFIG__TJC_DMA_ENABLE__             1       //? 启用TJC_USART DMA模式
 
-#define __HARDWARE_CONFIG__TFTLCD_ENABLE__              1       // 启用TFTLCD.h、TFTLCD_Init.h
+#define __HARDWARE_CONFIG__TFTLCD_ENABLE__              0       // 启用TFTLCD.h、TFTLCD_Init.h
 
 #define __HARDWARE_CONFIG__GPU_TEMP_ADC_ENABLE__        0       // 启用gpu_temp_adc.h
 
@@ -28,7 +30,7 @@
 
 #define __HARDWARE_CONFIG__USER_TIMER_ENABLE__          1       // 启用user_timer.h    
     #define __HARDWARE_CONFIG__USER_TIMER2_ENABLE__          0       // 启用timer2
-    #define __HARDWARE_CONFIG__USER_TIMER3_ENABLE__          0       // 启用timer3
+    #define __HARDWARE_CONFIG__USER_TIMER3_ENABLE__          1       // 启用timer3
 
 //*******************************// extern parameters       //************************************//
 //*******************************// define structure unity  //************************************//

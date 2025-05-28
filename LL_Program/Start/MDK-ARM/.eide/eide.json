@@ -292,7 +292,7 @@
       "uploadConfig": {
         "bin": "",
         "proType": "SWD",
-        "resetMode": "Crst",
+        "resetMode": "default",
         "runAfterProgram": true,
         "speed": 4000,
         "address": "0x8000000",
@@ -347,7 +347,6 @@
           "beforeBuildTasks": [],
           "afterBuildTasks": [],
           "global": {
-            "use-microLIB": false,
             "output-debug-info": "enable"
           },
           "c/cpp-compiler": {
@@ -357,14 +356,12 @@
             "C_FLAGS": "--diag_suppress=1 --diag_suppress=1295",
             "CXX_FLAGS": "--diag_suppress=1 --diag_suppress=1295",
             "warnings": "all-warnings",
-            "gnu-extensions": true
+            "gnu-extensions": true,
+            "optimize-for-time": true
           },
           "asm-compiler": {},
           "linker": {
-            "output-format": "elf",
-            "xo-base": "",
-            "ro-base": "",
-            "rw-base": ""
+            "output-format": "elf"
           }
         }
       }
