@@ -10,7 +10,7 @@ extern "C"{
 //*******************************// define statement        //************************************//
 
 #define bsp_IMx                 TIM7				//宏定义方便替换定时器
-#define bsp_us                  (bsp_IMx->CNT + bspTick * 0xffff) 
+#define bsp_us                  (bsp_IMx->CNT + (bspTick << 16)) 
 #define bsp_ms                  (bsp_us / 1000) 
 #define bsp_sec                 (bsp_ms / 1000) 
 #define bsp_min                 (bsp_sec / 60) 
@@ -48,6 +48,10 @@ extern inline void bspTick_mark_1_set();
 extern inline void bspTick_mark_2_set();
 extern inline void bspTick_mark_dif_show(uint8_t SHOW_Windows);
 extern inline void bspTick_mark_dif_show_s(uint8_t SHOW_Windows, char *string);
+extern inline void bspTick_mark_3_set();
+extern inline void bspTick_mark_4_set();
+extern inline void bspTick_mark34_dif_show(uint8_t SHOW_Windows);
+extern inline void bspTick_mark34_dif_show_s(uint8_t SHOW_Windows, char *string);
 
 #ifdef  __cplusplus
 }

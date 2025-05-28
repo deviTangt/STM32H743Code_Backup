@@ -141,6 +141,12 @@
           },
           {
             "path": "../Hardware/Source/dma_adc.c"
+          },
+          {
+            "path": "../Hardware/Source/ad9959.c"
+          },
+          {
+            "path": "../Hardware/Source/user_timer.c"
           }
         ],
         "folders": []
@@ -286,7 +292,7 @@
       "uploadConfig": {
         "bin": "",
         "proType": "SWD",
-        "resetMode": "default",
+        "resetMode": "Crst",
         "runAfterProgram": true,
         "speed": 4000,
         "address": "0x8000000",

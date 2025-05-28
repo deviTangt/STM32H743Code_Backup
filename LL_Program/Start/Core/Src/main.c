@@ -20,6 +20,7 @@
 #include "main.h"
 #include "dma.h"
 #include "memorymap.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -104,6 +105,8 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
+  MX_TIM2_Init();
+  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
   config_init();  //! various periph initialized
 
@@ -113,15 +116,16 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1){
     //*******************************// real time                   //************************************//
-    bspTick_mark_1_set();
+    // bspTick_mark_1_set();
     printf_s(20, "min:%3d sec:%02d.%03d us:%03d\r\n", bsp_min, bsp_sec % 60, bsp_ms % 1000, bsp_us % 1000);
-    bspTick_mark_2_set();
-    bspTick_mark_dif_show(14);
+    // bspTick_mark_2_set();
+    // bspTick_mark_dif_show(14);
 
     //*******************************// while logic                 //************************************//
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    printf_s(10, "timer3_call_cnt:%d", timer3_call_cnt);
     printf_s(4, "dma_cnt:%d,%0d,%0d", dma_adc_finish_cnt / 1000000, dma_adc_finish_cnt / 1000 % 1000, dma_adc_finish_cnt % 1000);
     for (uint8_t i = 0;i < 2;i ++){
       printf_s(5 + i, "AD_val %d:%dmV", i, DMA_ADC_RX_BUF[i] * 3300 / 0xffff);

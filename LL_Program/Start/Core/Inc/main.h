@@ -53,6 +53,7 @@ extern "C" {
 #include "bsp_timer.h"
 #include "TJC_USART.h"
 #include "LED.h"
+#include "user_timer.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -80,7 +81,6 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define KEY_1_Pin LL_GPIO_PIN_3
 #define KEY_1_GPIO_Port GPIOE
-#define KEY_1_EXTI_IRQn EXTI3_IRQn
 #define LED_1_Pin LL_GPIO_PIN_1
 #define LED_1_GPIO_Port GPIOA
 #define TFTLCD_SDA_Pin LL_GPIO_PIN_7

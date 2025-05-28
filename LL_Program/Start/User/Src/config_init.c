@@ -44,6 +44,21 @@ void config_init(){
         LCD_Fill(0, 0, LCD_W, LCD_H, WHITE);
         LCD_ShowPicture(0, 0, 128, 134, gImage_HuaXiaoKe);
     #endif // end of __HARDWARE_CONFIG__TFTLCD_ENABLE__
+
+    //? User Timer Initialized
+    #if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER_ENABLE__
+        //? User Timer 2
+        #if __HARDWARE_CONFIG__USER_TIMER2_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER2_ENABLE__
+            timer2_config_init();
+            timer2_start();
+        #endif // end of __HARDWARE_CONFIG__USER_TIMER2_ENABLE__
+
+        //? User Timer 3
+        #if __HARDWARE_CONFIG__USER_TIMER3_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER3_ENABLE__
+            timer3_config_init();
+            timer3_start();
+        #endif // end of __HARDWARE_CONFIG__USER_TIMER3_ENABLE__
+    #endif // end of __HARDWARE_CONFIG__USER_TIMER_ENABLE__
 }
 
 //*******************************// end_c               //************************************//

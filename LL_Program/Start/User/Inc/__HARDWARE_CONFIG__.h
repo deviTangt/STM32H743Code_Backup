@@ -24,6 +24,11 @@
 #define __HARDWARE_CONFIG__DMA_ADC_ENABLE__             1       // 启用dma_adc.h
     #define __HARDWARE_CONFIG__SAMPLE_ADC_DMA_ENABLE__       1       // 启用dma传输ADC采样
 
+#define __HARDWARE_CONFIG__AD9959_ENABLE__              0       // 启用ad9959.h    
+
+#define __HARDWARE_CONFIG__USER_TIMER_ENABLE__          1       // 启用user_timer.h    
+    #define __HARDWARE_CONFIG__USER_TIMER2_ENABLE__          0       // 启用timer2
+    #define __HARDWARE_CONFIG__USER_TIMER3_ENABLE__          0       // 启用timer3
 
 //*******************************// extern parameters       //************************************//
 //*******************************// define structure unity  //************************************//

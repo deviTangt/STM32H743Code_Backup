@@ -165,6 +165,8 @@ inline void TJC_PagaInit(){
     printf_s_c("page main");
     printf_s_c("click b2,0");
     printf_s_c("click b4,0");
+	printf_s_c("page bonus_wave");
+    printf_s_c("cle bonus_wave.s0.id,0");
     printf_s_c("page show");
     printf_s_c("click b6,0");
 }

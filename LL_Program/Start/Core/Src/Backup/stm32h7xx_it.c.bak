@@ -199,40 +199,6 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief This function handles EXTI line3 interrupt.
-  */
-void EXTI3_IRQHandler(void)
-{
-  /* USER CODE BEGIN EXTI3_IRQn 0 */
-
-  /* USER CODE END EXTI3_IRQn 0 */
-  if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_3) != RESET)
-  {
-    LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_3);
-    /* USER CODE BEGIN LL_EXTI_LINE_3 */
-    #if __HARDWARE_CONFIG__KEY_ENABLE__
-      //-----------------------------------------------------------------
-      //? EXTI3_IRQHandler_KEY_1_DETECT
-      //-----------------------------------------------------------------
-      //
-      // Interrupt Excute Function: Upon KEY_1 pressed, then turn the lighting state of LED.
-      // Detected Case: Low state of KEY_1
-      // Returned Value: The lighting state of LED 
-      // Notice: None
-      //
-      //-----------------------------------------------------------------
-      if (~KEY1_ON){
-        LED_TURN();
-      }
-    #endif // end of __HARDWARE_CONFIG__KEY_ENABLE__
-    /* USER CODE END LL_EXTI_LINE_3 */
-  }
-  /* USER CODE BEGIN EXTI3_IRQn 1 */
-
-  /* USER CODE END EXTI3_IRQn 1 */
-}
-
-/**
   * @brief This function handles DMA1 stream0 global interrupt.
   */
 void DMA1_Stream0_IRQHandler(void)

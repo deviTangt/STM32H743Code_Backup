@@ -12,6 +12,8 @@ __IO uint32_t bspTick;		//! 定义计数变量，使用volatile修饰，类似uwTick
 uint32_t bspTick_mark_0;
 uint32_t bspTick_mark_1;
 uint32_t bspTick_mark_2;
+uint32_t bspTick_mark_3;
+uint32_t bspTick_mark_4;
 
 //*******************************// define function     //************************************//
 
@@ -33,7 +35,7 @@ inline void bsp_Timer_Config_Init(void){
 	NVIC_SetPriority(TIM7_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),10, 0));
 	NVIC_EnableIRQ(TIM7_IRQn);
 
-	//? 配置定时器结构体
+	//? 配置定时器结构体 1
 	LL_TIM_InitTypeDef TIM_InitStruct             = {0};
 	                   TIM_InitStruct.Prescaler   = 239;                    // 预分频
 	                   TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;  // 计数模式：向上计数
@@ -77,7 +79,7 @@ inline void bsp_Timer_Init(void){
 //
 //-----------------------------------------------------------------
 inline uint32_t Get_SystemTimer(void){
-	return bsp_IMx->CNT + bspTick * 0xffff;
+	return bsp_IMx->CNT + (bspTick << 16);
 }
 //-----------------------------------------------------------------
 // inline void Update_SystemTick(void)
@@ -86,7 +88,7 @@ inline uint32_t Get_SystemTimer(void){
 // 函数功能: 更新定时器时间
 // 入口参数1: 无
 // 返 回 值: 无
-// 注意事项: 将此函数加入定时器中断服务函数中
+// 注意事项: 将此函数加入定时器中断服务函数TIM7_IRQHandler(void)中
 //
 //-----------------------------------------------------------------
 inline void Update_SystemTick(void)
@@ -138,7 +140,7 @@ inline void bspTick_mark_0_set(){
 	bspTick_mark_0 = bsp_us;
 }
 //-----------------------------------------------------------------
-// inline void Update_SystemTick(void)
+// inline void bspTick_mark_1_set()
 //-----------------------------------------------------------------
 //
 // 函数功能: 记录bspTick断点1时间
@@ -151,7 +153,7 @@ inline void bspTick_mark_1_set(){
 	bspTick_mark_1 = bsp_us;
 }
 //-----------------------------------------------------------------
-// inline void Update_SystemTick(void)
+// inline void bspTick_mark_2_set()
 //-----------------------------------------------------------------
 //
 // 函数功能: 记录bspTick断点2时间
@@ -188,6 +190,59 @@ inline void bspTick_mark_dif_show(uint8_t SHOW_Windows){
 //
 //-----------------------------------------------------------------
 inline void bspTick_mark_dif_show_s(uint8_t SHOW_Windows, char *string){
+	printf_s(SHOW_Windows, "%s:%2d.%03ds %03dus", string, bsp_mark_dif_sec, bsp_mark_dif_ms, bsp_mark_dif_us);
+}
+//-----------------------------------------------------------------
+// inline void bspTick_mark_3_set()
+//-----------------------------------------------------------------
+//
+// 函数功能: 记录bspTick断点3时间
+// 入口参数1: 延时时数(ms)
+// 返 回 值: 无
+// 注意事项: 无：
+//
+//-----------------------------------------------------------------
+inline void bspTick_mark_3_set(){
+	bspTick_mark_3 = bsp_us;
+}
+//-----------------------------------------------------------------
+// inline void bspTick_mark_4_set()
+//-----------------------------------------------------------------
+//
+// 函数功能: 记录bspTick断点4时间
+// 入口参数1: 延时时数(ms)
+// 返 回 值: 无
+// 注意事项: 无：
+//
+//-----------------------------------------------------------------
+inline void bspTick_mark_4_set(){
+	bspTick_mark_4 = bsp_us;
+}
+//-----------------------------------------------------------------
+// inline void bspTick_mark34_dif_show(uint8_t SHOW_Windows)
+//-----------------------------------------------------------------
+//
+// 函数功能: 显示bspTick断点3和4之间时间差
+// 入口参数1: 显示窗口
+// 返 回 值: 无
+// 注意事项: 无：
+//
+//-----------------------------------------------------------------
+inline void bspTick_mark34_dif_show(uint8_t SHOW_Windows){
+	printf_s(SHOW_Windows, "Tick34 Dif:%2d.%03ds %03dus", bsp_mark_dif_sec, bsp_mark_dif_ms, bsp_mark_dif_us);
+}
+//-----------------------------------------------------------------
+// inline void bspTick_mark34_dif_show_s(uint8_t SHOW_Windows, char *string)
+//-----------------------------------------------------------------
+//
+// 函数功能: 显示bspTick断点3和4之间时间差, 自定义显示语句
+// 入口参数1: 显示窗口
+// 入口参数1: 显示语句
+// 返 回 值: 无
+// 注意事项: 无：
+//
+//-----------------------------------------------------------------
+inline void bspTick_mark34_dif_show_s(uint8_t SHOW_Windows, char *string){
 	printf_s(SHOW_Windows, "%s:%2d.%03ds %03dus", string, bsp_mark_dif_sec, bsp_mark_dif_ms, bsp_mark_dif_us);
 }
 
