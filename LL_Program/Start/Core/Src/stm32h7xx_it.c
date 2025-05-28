@@ -212,7 +212,7 @@ void EXTI3_IRQHandler(void)
     /* USER CODE BEGIN LL_EXTI_LINE_3 */
     #if __HARDWARE_CONFIG__KEY_ENABLE__
       //-----------------------------------------------------------------
-      // EXTI3_IRQHandler_KEY_1_DETECT
+      //? EXTI3_IRQHandler_KEY_1_DETECT
       //-----------------------------------------------------------------
       //
       // Interrupt Excute Function: Upon KEY_1 pressed, then turn the lighting state of LED.
@@ -273,6 +273,32 @@ void DMA1_Stream1_IRQHandler(void)
 }
 
 /**
+  * @brief This function handles DMA1 stream2 global interrupt.
+  */
+void DMA1_Stream2_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Stream2_IRQn 0 */
+
+  /* USER CODE END DMA1_Stream2_IRQn 0 */
+  /* USER CODE BEGIN DMA1_Stream2_IRQn 1 */
+  DMA1_Stream2_IRQHandler_Func();
+  /* USER CODE END DMA1_Stream2_IRQn 1 */
+}
+
+/**
+  * @brief This function handles ADC1 and ADC2 global interrupts.
+  */
+void ADC_IRQHandler(void)
+{
+  /* USER CODE BEGIN ADC_IRQn 0 */
+
+  /* USER CODE END ADC_IRQn 0 */
+  /* USER CODE BEGIN ADC_IRQn 1 */
+
+  /* USER CODE END ADC_IRQn 1 */
+}
+
+/**
   * @brief This function handles EXTI line[9:5] interrupts.
   */
 void EXTI9_5_IRQHandler(void)
@@ -286,7 +312,7 @@ void EXTI9_5_IRQHandler(void)
     /* USER CODE BEGIN LL_EXTI_LINE_5 */
     #if __HARDWARE_CONFIG__KEY_ENABLE__
       //-----------------------------------------------------------------
-      // EXTI5_IRQHandler_KEY_2_DETECT
+      //? EXTI5_IRQHandler_KEY_2_DETECT
       //-----------------------------------------------------------------
       //
       // Interrupt Excute Function: Upon KEY_2 pressed, then turn the lighting state of LED.
@@ -308,6 +334,19 @@ void EXTI9_5_IRQHandler(void)
 }
 
 /**
+  * @brief This function handles TIM4 global interrupt.
+  */
+void TIM4_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM4_IRQn 0 */
+  
+  /* USER CODE END TIM4_IRQn 0 */
+  /* USER CODE BEGIN TIM4_IRQn 1 */
+
+  /* USER CODE END TIM4_IRQn 1 */
+}
+
+/**
   * @brief This function handles TIM7 global interrupt.
   */
 void TIM7_IRQHandler(void)
@@ -316,7 +355,7 @@ void TIM7_IRQHandler(void)
   #if __HARDWARE_CONFIG__BSP_TIMER_ENABLE__
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    // TIM7_IRQHandler_BSP_Timer_UPDATE
+    //? TIM7_IRQHandler_BSP_Timer_UPDATE
     //-----------------------------------------------------------------
     //
     // Interrupt Excute Function: Once TIM7->CNT reached the maximum counter value 0xffff,

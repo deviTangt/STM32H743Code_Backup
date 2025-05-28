@@ -27,10 +27,15 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#if __HARDWARE_CONFIG__KEY_ENABLE__
+
+#if __HARDWARE_CONFIG__KEY_ENABLE__ // begin of __HARDWARE_CONFIG__KEY_ENABLE__
   #include "KEY.h"
   #include "LED.h"
-#endif
+#endif // end of __HARDWARE_CONFIG__KEY_ENABLE__
+
+#if __HARDWARE_CONFIG__DMA_ADC_ENABLE__	// begin of __HARDWARE_CONFIG__DMA_ADC_ENABLE__
+  #include "dma_adc.h"
+#endif // end of __HARDWARE_CONFIG__DMA_ADC_ENABLE__
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -61,7 +66,10 @@ void SysTick_Handler(void);
 void EXTI3_IRQHandler(void);
 void DMA1_Stream0_IRQHandler(void);
 void DMA1_Stream1_IRQHandler(void);
+void DMA1_Stream2_IRQHandler(void);
+void ADC_IRQHandler(void);
 void EXTI9_5_IRQHandler(void);
+void TIM4_IRQHandler(void);
 void TIM7_IRQHandler(void);
 void UART7_IRQHandler(void);
 /* USER CODE BEGIN EFP */

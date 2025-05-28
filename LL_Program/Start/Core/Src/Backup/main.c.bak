@@ -18,21 +18,14 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "adc.h"
 #include "dma.h"
 #include "memorymap.h"
-#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "LED.h"
-#include "KEY.h"
-#include "TJC_USART.h"
-#include "TFTLCD_Init.h"
-#include "TFTLCD.h"
-#include "pic.h"
+#include "config_init.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -105,48 +98,38 @@ int main(void)
   PeriphCommonClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+  bsp_Timer_Config_Init();        //! Enable BspTick Timer
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_TIM7_Init();
-  MX_UART7_Init();
-  MX_ADC3_Init();
   /* USER CODE BEGIN 2 */
-  TJC_PagaInit();
-  LCD_Init();
-	LCD_Fill(0, 0, LCD_W, LCD_H, WHITE);
+  config_init();  //! various periph initialized
 
-  printf_s(21, "It's MyGo!!!!!");
-
-  LCD_ShowPicture(0, 0, 128, 134, gImage_HuaXiaoKe);
-
-  
-  uint16_t ADC_Value;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1){
     //*******************************// real time                   //************************************//
+    bspTick_mark_1_set();
     printf_s(20, "min:%3d sec:%02d.%03d us:%03d\r\n", bsp_min, bsp_sec % 60, bsp_ms % 1000, bsp_us % 1000);
+    bspTick_mark_2_set();
+    bspTick_mark_dif_show(14);
+
+    //*******************************// while logic                 //************************************//
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    LL_ADC_REG_StartConversion(ADC3); //��������ת��ͨ��
-		//while(!LL_ADC_IsActiveFlag_EOS(ADC3)){};//�ȴ�ת������	
-    uint16_t TS_CAL1 = *(__IO uint16_t *)(0x1FF1E820);
-    uint16_t TS_CAL2 = *(__IO uint16_t *)(0x1FF1E840);
+    printf_s(4, "dma_cnt:%d,%0d,%0d", dma_adc_finish_cnt / 1000000, dma_adc_finish_cnt / 1000 % 1000, dma_adc_finish_cnt % 1000);
+    for (uint8_t i = 0;i < 6;i ++){
+      printf_s(5 + i, "AD_val %d:%dmV", i, DMA_ADC_RX_BUF[i] * 3300 / 0xffff);
+    }
 
-    double Temp_oC = ((110.0f - 30.0f) / (TS_CAL2 - TS_CAL1)) * (ADC_Value - TS_CAL1) + 30.0f;
-
-	  ADC_Value = LL_ADC_REG_ReadConversionData12(ADC3);
-    printf_s(19, "%d MPU Temp:%3.5f", ADC_Value, Temp_oC);
-
-    //*******************************// delay                  //************************************//
-    delay_ms(10);                                                                                                                                                                                                                                                                                    
+    //*******************************// delay logic                 //************************************//
+    delay_ms(10);                                       
+                                                                                                                                                                                                                                           
   }
   /* USER CODE END 3 */
 }

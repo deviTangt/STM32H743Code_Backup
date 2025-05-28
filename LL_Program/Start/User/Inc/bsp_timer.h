@@ -36,6 +36,7 @@ extern uint32_t bspTick_mark_2;
 //*******************************// define parameters       //************************************//
 //*******************************// extern function         //************************************//
 
+extern inline void bsp_Timer_Config_Init(void);
 extern inline void bsp_Timer_Init(void);
 extern inline uint32_t Get_SystemTimer(void);
 extern inline void Update_SystemTick(void);

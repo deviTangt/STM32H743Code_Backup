@@ -22,21 +22,155 @@
 
 /* USER CODE BEGIN 0 */
 
-//-----------------------------------------------------------------
-// double MPU_Temperature_Get()
-//-----------------------------------------------------------------
-static uint16_t TS_CAL1;    // 内部温度参考数据
-static uint16_t TS_CAL2;
-
-uint16_t ADC_Value;
-double Temp_oC;
-//-----------------------------------------------------------------
-// void MPU_Temperature_Show()
-//-----------------------------------------------------------------
-double Temp_MPU;
-
 /* USER CODE END 0 */
 
+/* ADC1 init function */
+void MX_ADC1_Init(void)
+{
+
+  /* USER CODE BEGIN ADC1_Init 0 */
+
+  /* USER CODE END ADC1_Init 0 */
+
+  LL_ADC_InitTypeDef ADC_InitStruct = {0};
+  LL_ADC_REG_InitTypeDef ADC_REG_InitStruct = {0};
+  LL_ADC_CommonInitTypeDef ADC_CommonInitStruct = {0};
+
+  LL_GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  LL_RCC_SetADCClockSource(LL_RCC_ADC_CLKSOURCE_PLL2P);
+
+  /* Peripheral clock enable */
+  LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_ADC12);
+
+  LL_AHB4_GRP1_EnableClock(LL_AHB4_GRP1_PERIPH_GPIOC);
+  LL_AHB4_GRP1_EnableClock(LL_AHB4_GRP1_PERIPH_GPIOA);
+  LL_AHB4_GRP1_EnableClock(LL_AHB4_GRP1_PERIPH_GPIOB);
+  /**ADC1 GPIO Configuration
+  PC0   ------> ADC1_INP10
+  PC1   ------> ADC1_INN10
+  PA0   ------> ADC1_INP16
+  PA3   ------> ADC1_INP15
+  PA4   ------> ADC1_INP18
+  PA6   ------> ADC1_INP3
+  PB0   ------> ADC1_INN5
+  PB1   ------> ADC1_INP5
+  */
+  GPIO_InitStruct.Pin = LL_GPIO_PIN_0|LL_GPIO_PIN_1;
+  GPIO_InitStruct.Mode = LL_GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
+  LL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  GPIO_InitStruct.Pin = LL_GPIO_PIN_0|LL_GPIO_PIN_3|LL_GPIO_PIN_4|LL_GPIO_PIN_6;
+  GPIO_InitStruct.Mode = LL_GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
+  LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  GPIO_InitStruct.Pin = LL_GPIO_PIN_0|LL_GPIO_PIN_1;
+  GPIO_InitStruct.Mode = LL_GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
+  LL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /* ADC1 DMA Init */
+
+  /* ADC1 Init */
+  LL_DMA_SetPeriphRequest(DMA1, LL_DMA_STREAM_2, LL_DMAMUX1_REQ_ADC1);
+
+  LL_DMA_SetDataTransferDirection(DMA1, LL_DMA_STREAM_2, LL_DMA_DIRECTION_PERIPH_TO_MEMORY);
+
+  LL_DMA_SetStreamPriorityLevel(DMA1, LL_DMA_STREAM_2, LL_DMA_PRIORITY_MEDIUM);
+
+  LL_DMA_SetMode(DMA1, LL_DMA_STREAM_2, LL_DMA_MODE_CIRCULAR);
+
+  LL_DMA_SetPeriphIncMode(DMA1, LL_DMA_STREAM_2, LL_DMA_PERIPH_NOINCREMENT);
+
+  LL_DMA_SetMemoryIncMode(DMA1, LL_DMA_STREAM_2, LL_DMA_MEMORY_INCREMENT);
+
+  LL_DMA_SetPeriphSize(DMA1, LL_DMA_STREAM_2, LL_DMA_PDATAALIGN_WORD);
+
+  LL_DMA_SetMemorySize(DMA1, LL_DMA_STREAM_2, LL_DMA_MDATAALIGN_WORD);
+
+  LL_DMA_DisableFifoMode(DMA1, LL_DMA_STREAM_2);
+
+  /* ADC1 interrupt Init */
+  NVIC_SetPriority(ADC_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+  NVIC_EnableIRQ(ADC_IRQn);
+
+  /* USER CODE BEGIN ADC1_Init 1 */
+
+  LL_ADC_EnableIT_EOS(ADC1);
+
+  /* USER CODE END ADC1_Init 1 */
+
+  /** Common config
+  */
+  LL_ADC_SetOverSamplingScope(ADC1, LL_ADC_OVS_DISABLE);
+  ADC_InitStruct.Resolution = LL_ADC_RESOLUTION_16B;
+  ADC_InitStruct.LowPowerMode = LL_ADC_LP_MODE_NONE;
+  LL_ADC_Init(ADC1, &ADC_InitStruct);
+  ADC_REG_InitStruct.TriggerSource = LL_ADC_REG_TRIG_EXT_TIM4_TRGO;
+  ADC_REG_InitStruct.SequencerLength = LL_ADC_REG_SEQ_SCAN_ENABLE_5RANKS;
+  ADC_REG_InitStruct.SequencerDiscont = DISABLE;
+  ADC_REG_InitStruct.ContinuousMode = LL_ADC_REG_CONV_SINGLE;
+  ADC_REG_InitStruct.Overrun = LL_ADC_REG_OVR_DATA_PRESERVED;
+  LL_ADC_REG_Init(ADC1, &ADC_REG_InitStruct);
+  LL_ADC_REG_SetDataTransferMode(ADC1, LL_ADC_REG_DMA_TRANSFER_UNLIMITED);
+  ADC_CommonInitStruct.CommonClock = LL_ADC_CLOCK_ASYNC_DIV6;
+  ADC_CommonInitStruct.Multimode = LL_ADC_MULTI_INDEPENDENT;
+  LL_ADC_CommonInit(__LL_ADC_COMMON_INSTANCE(ADC1), &ADC_CommonInitStruct);
+  LL_ADC_REG_SetTriggerEdge(ADC1, LL_ADC_REG_TRIG_EXT_RISING);
+
+  /* Disable ADC deep power down (enabled by default after reset state) */
+  LL_ADC_DisableDeepPowerDown(ADC1);
+  /* Enable ADC internal voltage regulator */
+  LL_ADC_EnableInternalRegulator(ADC1);
+  /* Delay for ADC internal voltage regulator stabilization. */
+  /* Compute number of CPU cycles to wait for, from delay in us. */
+  /* Note: Variable divided by 2 to compensate partially */
+  /* CPU processing cycles (depends on compilation optimization). */
+  /* Note: If system core clock frequency is below 200kHz, wait time */
+  /* is only a few CPU processing cycles. */
+  __IO uint32_t wait_loop_index;
+  wait_loop_index = ((LL_ADC_DELAY_INTERNAL_REGUL_STAB_US * (SystemCoreClock / (100000 * 2))) / 10);
+  while(wait_loop_index != 0)
+  {
+    wait_loop_index--;
+  }
+
+  /** Configure Regular Channel
+  */
+  LL_ADC_REG_SetSequencerRanks(ADC1, LL_ADC_REG_RANK_1, LL_ADC_CHANNEL_3);
+  LL_ADC_SetChannelSamplingTime(ADC1, LL_ADC_CHANNEL_3, LL_ADC_SAMPLINGTIME_8CYCLES_5);
+  LL_ADC_SetChannelSingleDiff(ADC1, LL_ADC_CHANNEL_3, LL_ADC_SINGLE_ENDED);
+
+  /** Configure Regular Channel
+  */
+  LL_ADC_REG_SetSequencerRanks(ADC1, LL_ADC_REG_RANK_2, LL_ADC_CHANNEL_15);
+  LL_ADC_SetChannelSamplingTime(ADC1, LL_ADC_CHANNEL_15, LL_ADC_SAMPLINGTIME_8CYCLES_5);
+  LL_ADC_SetChannelSingleDiff(ADC1, LL_ADC_CHANNEL_15, LL_ADC_SINGLE_ENDED);
+
+  /** Configure Regular Channel
+  */
+  LL_ADC_REG_SetSequencerRanks(ADC1, LL_ADC_REG_RANK_3, LL_ADC_CHANNEL_18);
+  LL_ADC_SetChannelSamplingTime(ADC1, LL_ADC_CHANNEL_18, LL_ADC_SAMPLINGTIME_8CYCLES_5);
+  LL_ADC_SetChannelSingleDiff(ADC1, LL_ADC_CHANNEL_18, LL_ADC_SINGLE_ENDED);
+
+  /** Configure Regular Channel
+  */
+  LL_ADC_REG_SetSequencerRanks(ADC1, LL_ADC_REG_RANK_4, LL_ADC_CHANNEL_5);
+  LL_ADC_SetChannelSamplingTime(ADC1, LL_ADC_CHANNEL_5, LL_ADC_SAMPLINGTIME_8CYCLES_5);
+  LL_ADC_SetChannelSingleDiff(ADC1, LL_ADC_CHANNEL_5, LL_ADC_DIFFERENTIAL_ENDED);
+
+  /** Configure Regular Channel
+  */
+  LL_ADC_REG_SetSequencerRanks(ADC1, LL_ADC_REG_RANK_5, LL_ADC_CHANNEL_10);
+  LL_ADC_SetChannelSamplingTime(ADC1, LL_ADC_CHANNEL_10, LL_ADC_SAMPLINGTIME_8CYCLES_5);
+  LL_ADC_SetChannelSingleDiff(ADC1, LL_ADC_CHANNEL_10, LL_ADC_DIFFERENTIAL_ENDED);
+  /* USER CODE BEGIN ADC1_Init 2 */
+
+  /* USER CODE END ADC1_Init 2 */
+
+}
 /* ADC3 init function */
 void MX_ADC3_Init(void)
 {
@@ -73,6 +207,7 @@ void MX_ADC3_Init(void)
   ADC_REG_InitStruct.Overrun = LL_ADC_REG_OVR_DATA_PRESERVED;
   LL_ADC_REG_Init(ADC3, &ADC_REG_InitStruct);
   LL_ADC_REG_SetDataTransferMode(ADC3, LL_ADC_REG_DR_TRANSFER);
+  ADC_CommonInitStruct.CommonClock = LL_ADC_CLOCK_ASYNC_DIV6;
   ADC_CommonInitStruct.Multimode = LL_ADC_MULTI_INDEPENDENT;
   LL_ADC_CommonInit(__LL_ADC_COMMON_INSTANCE(ADC3), &ADC_CommonInitStruct);
 
@@ -101,15 +236,9 @@ void MX_ADC3_Init(void)
   LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC3), LL_ADC_AWD_CH_TEMPSENSOR_REG);
   /* USER CODE BEGIN ADC3_Init 2 */
 
-  LL_ADC_StartCalibration(ADC3, LL_ADC_CALIB_OFFSET, LL_ADC_SINGLE_ENDED);  // calibration
-  while(LL_ADC_IsCalibrationOnGoing(ADC3));                                 // wait for the end of calibration
-  LL_ADC_Enable(ADC3);                                                      // enable adc3
-
-  //-----------------------------------------------------------------
-  // double MPU_Temperature_Get()
-  //-----------------------------------------------------------------
-  TS_CAL1 = *(__IO uint16_t *)(0x1FF1E820);
-  TS_CAL2 = *(__IO uint16_t *)(0x1FF1E840);
+  #if __HARDWARE_CONFIG__GPU_TEMP_ADC_ENABLE__ // begin of __HARDWARE_CONFIG__GPU_TEMP_ADC_ENABLE__
+    gpu_temp_adc3_init();
+  #endif // end of __HARDWARE_CONFIG__GPU_TEMP_ADC_ENABLE__
 
   /* USER CODE END ADC3_Init 2 */
 
@@ -117,41 +246,7 @@ void MX_ADC3_Init(void)
 
 /* USER CODE BEGIN 1 */
 
-//-----------------------------------------------------------------
-// double MPU_Temperature_Get()
-//-----------------------------------------------------------------
-//
-// 函数功能: 获取GPU内部传感器温度
-// 入口参数1: 无
-// 返 回 值: 无
-// 注意事项: 无
-//
-//-----------------------------------------------------------------
-double MPU_Temperature_Get(){
-  LL_ADC_REG_StartConversion(ADC3);           // 开启ADC3转换
-	while(!LL_ADC_IsActiveFlag_EOS(ADC3));    // 等待转换结束	
-  
-	ADC_Value = LL_ADC_REG_ReadConversionData16(ADC3);
-  Temp_oC = ((110.0f - 30.0f) / (TS_CAL2 - TS_CAL1)) * (ADC_Value - TS_CAL1) + 30.0f;
 
-  return Temp_oC;
-}
-//-----------------------------------------------------------------
-// void MPU_Temperature_Show()
-//-----------------------------------------------------------------
-//
-// 函数功能: 显示GPU内部传感器温度
-// 入口参数1: 无
-// 返 回 值: 无
-// 注意事项: 无
-//
-//-----------------------------------------------------------------
-void MPU_Temperature_Show(){
-  Temp_MPU = MPU_Temperature_Get();
-  if (10.0 < Temp_MPU && Temp_MPU < 100.0){
-    printf_s(19, "MPU Temp:%3.5f摄氏度", Temp_MPU);
-  }
-}
 
 
 /* USER CODE END 1 */

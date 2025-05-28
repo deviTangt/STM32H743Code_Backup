@@ -30,6 +30,8 @@ extern "C" {
 
 /* USER CODE BEGIN Includes */
 
+#include "TJC_USART.h"
+
 /* USER CODE END Includes */
 
 /* USER CODE BEGIN Private defines */

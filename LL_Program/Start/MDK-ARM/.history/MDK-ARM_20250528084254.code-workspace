@@ -26,7 +26,7 @@
             "editor.tabSize": 4,
             "editor.autoIndent": "advanced"
         },
-        "files.encoding": "gbk"
+        "files.encoding": "gb2312"
     },
     "extensions": {
         "recommendations": [

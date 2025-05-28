@@ -52,6 +52,7 @@ extern "C" {
 #include <stdio.h>
 #include "bsp_timer.h"
 #include "TJC_USART.h"
+#include "LED.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

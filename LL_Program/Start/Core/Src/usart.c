@@ -133,6 +133,10 @@ void MX_UART7_Init(void)
   }
   /* USER CODE BEGIN UART7_Init 2 */
 
+    #if __HARDWARE_CONFIG__TJC_USART_ENABLE__ // begin of __HARDWARE_CONFIG__TJC_USART_ENABLE__
+      TJC_Usart_init();
+    #endif // end of __HARDWARE_CONFIG__TJC_USART_ENABLE__
+
   /* USER CODE END UART7_Init 2 */
 
 }

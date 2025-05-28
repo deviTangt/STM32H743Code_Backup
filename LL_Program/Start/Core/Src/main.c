@@ -18,21 +18,14 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "adc.h"
 #include "dma.h"
 #include "memorymap.h"
-#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "LED.h"
-#include "KEY.h"
-#include "TJC_USART.h"
-#include "TFTLCD_Init.h"
-#include "TFTLCD.h"
-#include "pic.h"
+#include "config_init.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -105,23 +98,14 @@ int main(void)
   PeriphCommonClock_Config();
 
   /* USER CODE BEGIN SysInit */
-  MX_TIM7_Init(); //! Enable BspTick Timer
+  bsp_Timer_Config_Init();        //! Enable BspTick Timer
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_UART7_Init();
-  MX_ADC3_Init();
   /* USER CODE BEGIN 2 */
-  TJC_PagaInit();
-  printf_s(21, "It's MyGo!!!!!");
-
-#if __HARDWARE_CONFIG__TFTLCD_ENABLE__ // begin of __HARDWARE_CONFIG__TFTLCD_ENABLE__
-  LCD_Init();
-	LCD_Fill(0, 0, LCD_W, LCD_H, WHITE);
-  LCD_ShowPicture(0, 0, 128, 134, gImage_HuaXiaoKe);
-#endif // end of __HARDWARE_CONFIG__TFTLCD_ENABLE__
+  config_init();  //! various periph initialized
 
   /* USER CODE END 2 */
 
@@ -133,12 +117,17 @@ int main(void)
     printf_s(20, "min:%3d sec:%02d.%03d us:%03d\r\n", bsp_min, bsp_sec % 60, bsp_ms % 1000, bsp_us % 1000);
     bspTick_mark_2_set();
     bspTick_mark_dif_show(14);
+
+    //*******************************// while logic                 //************************************//
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-   
+    printf_s(4, "dma_cnt:%d,%0d,%0d", dma_adc_finish_cnt / 1000000, dma_adc_finish_cnt / 1000 % 1000, dma_adc_finish_cnt % 1000);
+    for (uint8_t i = 0;i < 2;i ++){
+      printf_s(5 + i, "AD_val %d:%dmV", i, DMA_ADC_RX_BUF[i] * 3300 / 0xffff);
+    }
 
-    //*******************************// delay                  //************************************//
+    //*******************************// delay logic                 //************************************//
     delay_ms(10);                                       
                                                                                                                                                                                                                                            
   }

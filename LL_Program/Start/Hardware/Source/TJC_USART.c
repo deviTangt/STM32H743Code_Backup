@@ -32,6 +32,126 @@ int fputc(int ch, FILE* stream){
     return ch;
 }
 #endif // end of __HARDWARE_CONFIG__TJC_FPUTC_ENABLE__
+
+//-----------------------------------------------------------------
+// inline void TJC_USART_Config_Init()
+//-----------------------------------------------------------------
+//
+// 函数功能: 初始化TJC USART HMI引脚配置及USART端口
+// 入口参数1: 无
+// 返 回 值: 无
+// 注意事项: 无
+//
+//-----------------------------------------------------------------
+inline void TJC_USART_Config_Init(){
+	//? 时钟配置
+	LL_RCC_SetUSARTClockSource(LL_RCC_USART234578_CLKSOURCE_PCLK1);
+	LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_UART7);
+	LL_AHB4_GRP1_EnableClock(LL_AHB4_GRP1_PERIPH_GPIOE);
+
+	//? GPIO配置 
+	//? PE7   ------> UART7_RX
+	//? PE8   ------> UART7_TX
+	LL_GPIO_InitTypeDef GPIO_InitStruct            = {0};
+	                    GPIO_InitStruct.Pin        = TJC_TX_Pin|TJC_RX_Pin;
+	                    GPIO_InitStruct.Mode       = LL_GPIO_MODE_ALTERNATE;
+	                    GPIO_InitStruct.Speed      = LL_GPIO_SPEED_FREQ_HIGH;
+	                    GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
+	                    GPIO_InitStruct.Pull       = LL_GPIO_PULL_NO;
+	                    GPIO_InitStruct.Alternate  = LL_GPIO_AF_7;
+	LL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+
+	//? USART DMA配置
+	#if __HARDWARE_CONFIG__TJC_DMA_ENABLE__ // begin of __HARDWARE_CONFIG__TJC_DMA_ENABLE__
+		//? USART DMA TX配置
+		LL_DMA_SetPeriphRequest(DMA1, LL_DMA_STREAM_0, LL_DMAMUX1_REQ_UART7_TX);  
+		LL_DMA_SetDataTransferDirection(DMA1, LL_DMA_STREAM_0, LL_DMA_DIRECTION_MEMORY_TO_PERIPH); 
+		LL_DMA_SetStreamPriorityLevel(DMA1, LL_DMA_STREAM_0, LL_DMA_PRIORITY_HIGH);
+		LL_DMA_SetMode(DMA1, LL_DMA_STREAM_0, LL_DMA_MODE_NORMAL);
+		LL_DMA_SetPeriphIncMode(DMA1, LL_DMA_STREAM_0, LL_DMA_PERIPH_NOINCREMENT);
+		LL_DMA_SetMemoryIncMode(DMA1, LL_DMA_STREAM_0, LL_DMA_MEMORY_INCREMENT);
+		LL_DMA_SetPeriphSize(DMA1, LL_DMA_STREAM_0, LL_DMA_PDATAALIGN_BYTE);
+		LL_DMA_SetMemorySize(DMA1, LL_DMA_STREAM_0, LL_DMA_MDATAALIGN_BYTE);
+		LL_DMA_DisableFifoMode(DMA1, LL_DMA_STREAM_0);
+
+		//? USART DMA RX配置
+		#if __HARDWARE_CONFIG__TJC_RX_ENABLE__ // begin of __HARDWARE_CONFIG__TJC_RX_ENABLE__
+			LL_DMA_SetPeriphRequest(DMA1, LL_DMA_STREAM_1, LL_DMAMUX1_REQ_UART7_RX);
+			LL_DMA_SetDataTransferDirection(DMA1, LL_DMA_STREAM_1, LL_DMA_DIRECTION_PERIPH_TO_MEMORY);
+			LL_DMA_SetStreamPriorityLevel(DMA1, LL_DMA_STREAM_1, LL_DMA_PRIORITY_HIGH);
+			LL_DMA_SetMode(DMA1, LL_DMA_STREAM_1, LL_DMA_MODE_NORMAL);
+			LL_DMA_SetPeriphIncMode(DMA1, LL_DMA_STREAM_1, LL_DMA_PERIPH_NOINCREMENT);
+			LL_DMA_SetMemoryIncMode(DMA1, LL_DMA_STREAM_1, LL_DMA_MEMORY_INCREMENT);
+			LL_DMA_SetPeriphSize(DMA1, LL_DMA_STREAM_1, LL_DMA_PDATAALIGN_BYTE);
+			LL_DMA_SetMemorySize(DMA1, LL_DMA_STREAM_1, LL_DMA_MDATAALIGN_BYTE);
+			LL_DMA_DisableFifoMode(DMA1, LL_DMA_STREAM_1);
+		#endif // end of __HARDWARE_CONFIG__TJC_RX_ENABLE__
+	#endif // __HARDWARE_CONFIG__TJC_DMA_ENABLE__ // end of __HARDWARE_CONFIG__TJC_DMA_ENABLE__
+
+	//? USART 中断配置
+	NVIC_SetPriority(UART7_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),3, 0));
+	NVIC_EnableIRQ(UART7_IRQn);
+
+	//? USART结构体配置
+	LL_USART_InitTypeDef UART_InitStruct                     = {0};
+						UART_InitStruct.PrescalerValue      = LL_USART_PRESCALER_DIV1;   // USART预分频系数：1
+						UART_InitStruct.BaudRate            = 921600;                    // USART波特率
+						UART_InitStruct.DataWidth           = LL_USART_DATAWIDTH_8B;     // USART传输bit数：8bit
+						UART_InitStruct.StopBits            = LL_USART_STOPBITS_1;       // USART停止位数：1bit
+						UART_InitStruct.Parity              = LL_USART_PARITY_NONE;      // USART奇偶校验：无
+						UART_InitStruct.TransferDirection   = LL_USART_DIRECTION_TX_RX;  // USART传输方向：TX/RX双向
+						UART_InitStruct.HardwareFlowControl = LL_USART_HWCONTROL_NONE;   // USART硬件流控制
+						UART_InitStruct.OverSampling        = LL_USART_OVERSAMPLING_16;  // USART过采样系数：16
+	LL_USART_Init(UART7, &UART_InitStruct);
+
+	//? FIFO配置
+	LL_USART_DisableFIFO(UART7);
+	LL_USART_SetTXFIFOThreshold(UART7, LL_USART_FIFOTHRESHOLD_1_8);
+	LL_USART_SetRXFIFOThreshold(UART7, LL_USART_FIFOTHRESHOLD_1_8);
+	LL_USART_ConfigAsyncMode(UART7);
+
+
+	//? RXNE中断使能
+	#if __HARDWARE_CONFIG__TJC_RX_ENABLE__ // begin of __HARDWARE_CONFIG__TJC_RX_ENABLE__
+		LL_USART_EnableIT_RXNE(USART1);
+	#endif // __HARDWARE_CONFIG__TJC_RX_ENABLE__ // end of __HARDWARE_CONFIG__TJC_RX_ENABLE__
+
+	//? DMA设置
+	#if __HARDWARE_CONFIG__TJC_DMA_ENABLE__ // begin of __HARDWARE_CONFIG__TJC_DMA_ENABLE__
+		DMA_TJC_UART_UART_Init();
+	#endif // __HARDWARE_CONFIG__TJC_DMA_ENABLE__ // end of __HARDWARE_CONFIG__TJC_DMA_ENABLE__
+
+	//? USART使能
+	LL_USART_Enable(UART7);
+
+	// 等待USART初始化完成
+	while((!(LL_USART_IsActiveFlag_TEACK(UART7))) || (!(LL_USART_IsActiveFlag_REACK(UART7))))
+	{
+	}
+
+	//? 初始化TJC USART HMI
+    #if __HARDWARE_CONFIG__TJC_USART_ENABLE__ // begin of __HARDWARE_CONFIG__TJC_USART_ENABLE__
+      TJC_Usart_init();
+    #endif // end of __HARDWARE_CONFIG__TJC_USART_ENABLE__
+
+  /* USER CODE END UART7_Init 2 */
+}
+
+//-----------------------------------------------------------------
+// inline void TJC_Usart_init()
+//-----------------------------------------------------------------
+//
+// 函数功能: 初始化TJC USART HMI
+// 入口参数1: 无
+// 返 回 值: 无
+// 注意事项: 可放在"usart.c"的"void MX_UART7_Init(void)" (即main函数调用"MX_UART7_Init();")  
+//          的"/* USER CODE BEGIN UART7_Init 2 */"之后
+//
+//-----------------------------------------------------------------
+inline void TJC_Usart_init(){
+	TJC_PagaInit();
+    printf_s(21, "It's MyGo!!!!!");
+}
 //-----------------------------------------------------------------
 // inline void TJC_PagaInit()
 //-----------------------------------------------------------------
@@ -152,36 +272,33 @@ inline void TJC_SendCmd_sp(char *format){
 	TJC_SendString_n("\xff\xff\xff", 3);
 }
 //-----------------------------------------------------------------
-// inline void TJC_SendTxt_MAIN_n(uint8_t WindowIndex, uint8_t *string, uint8_t size)
+// inline void TJC_SendTxt_MAIN_n(char *string, uint8_t size)
 //-----------------------------------------------------------------
 //
-// 函数功能: 发送指令到TJC_USART1端口,并在串口屏main page中的t0或barx控件显示字符串，指定长度
+// 函数功能: 发送指令到TJC_USART1端口,并在串口屏main page中的t0控件显示字符串，指定长度
 // 入口参数1: uint8_t WindowIndex: 窗口索引（0~12）
 // 入口参数2: char* string: 待显示字符串
 // 入口参数3: uint8_t size: 显示字符串长度
 // 注意事项: 无
 //
 //-----------------------------------------------------------------
-inline void TJC_SendTxt_MAIN_n(uint8_t WindowIndex, char *string, uint8_t size){
-	if (WindowIndex == 0)	TJC_SendString_sp("\xff\xff\xffmain.t0.txt+=\"");
-	else 					TJC_SendString_s("\xff\xff\xffmain.bar%d.txt=\"", WindowIndex);
+inline void TJC_SendTxt_MAIN_n(char *string, uint8_t size){
+	TJC_SendString_sp("\xff\xff\xffmain.t0.txt+=\"");
 	TJC_SendString_n(string, size);
 	TJC_SendString_n("\"\xff\xff\xff", 4);
 }
 //-----------------------------------------------------------------
-// void TJC_SendTxt_MAIN_s(uint8_t WindowIndex, char *format, ...)
+// void TJC_SendTxt_MAIN_s(char *format, ...)
 //-----------------------------------------------------------------
 //
-// 函数功能: 发送指令到TJC_USART1端口,并在串口屏main page中的t0或barx控件显示字符串，含格式化参数
-// 入口参数1: uint8_t WindowIndex: 窗口索引（0~12）
-// 入口参数2: char* format: 待显示格式化字符串
-// 入口参数3: ... ： 格式化输入参数
+// 函数功能: 发送指令到TJC_USART1端口,并在串口屏main page中的t0控件显示字符串，含格式化参数
+// 入口参数1: char* format: 待显示格式化字符串
+// 入口参数2: ... ： 格式化输入参数
 // 注意事项: 无
 //
 //-----------------------------------------------------------------
-void TJC_SendTxt_MAIN_s(uint8_t WindowIndex, char *format, ...){
-	if (WindowIndex == 0)	TJC_SendString_sp("\xff\xff\xffmain.t0.txt+=\"");
-	else TJC_SendString_s("\xff\xff\xffmain.bar%d.txt=\"", WindowIndex);
+void TJC_SendTxt_MAIN_s(char *format, ...){
+	TJC_SendString_sp("\xff\xff\xffmain.t0.txt+=\"");
 	
 	va_list arg;
 	va_start(arg, format);
@@ -195,7 +312,7 @@ void TJC_SendTxt_MAIN_s(uint8_t WindowIndex, char *format, ...){
 //-----------------------------------------------------------------
 //
 // 函数功能: 发送指令到TJC_USART1端口,并在串口屏show page中的barx控件显示字符串，指定长度
-// 入口参数1: uint8_t WindowIndex: 窗口索引（0~12）
+// 入口参数1: uint8_t WindowIndex: 窗口索引（1~28 ）
 // 入口参数2: char* string: 待显示字符串
 // 入口参数3: uint8_t size: 显示字符串长度
 // 注意事项: 无
@@ -212,7 +329,7 @@ inline void TJC_SendTxt_SHOW_n(uint8_t WindowIndex, char *string, uint8_t size){
 //-----------------------------------------------------------------
 //
 // 函数功能: 发送指令到TJC_USART1端口,并在串口屏main page中的t0或barx控件显示字符串，含格式化参数
-// 入口参数1: uint8_t WindowIndex: 窗口索引（0~12）
+// 入口参数1: uint8_t WindowIndex: 窗口索引（1~28 ）
 // 入口参数2: char* format: 待显示格式化字符串
 // 入口参数3: ... ： 格式化输入参数
 // 注意事项: 无
@@ -241,39 +358,48 @@ void TJC_SendTxt_SHOW_s(uint8_t WindowIndex, char *format, ...){
 //
 //-----------------------------------------------------------------
 void DMA_TJC_UART_UART_Init(){
-	/*发送配置*/
+	//? 发送配置
 	// 使能DMA USART请求
 	LL_USART_EnableDMAReq_TX(TJC_HDMI_UART);
+
 	// 清除DMA传输完成中断与传输错误中断标志位 
-	LL_DMA_ClearFlag_TC0(DMA1); // TCIF Очищаем флаги - это ОБЯЗАТЕЛЬНО
-	LL_DMA_ClearFlag_TE0(DMA1);	// TELF
+	LL_DMA_ClearFlag_TC0(DMA1);  // TCIF Очищаем флаги - это ОБЯЗАТЕЛЬНО
+	LL_DMA_ClearFlag_TE0(DMA1);  // TELF
 	// 使能DMA传输完成中断与传输错误中断
 	LL_DMA_EnableIT_TC(DMA1, LL_DMA_STREAM_0);	// TCIE
 	LL_DMA_EnableIT_TE(DMA1, LL_DMA_STREAM_0);	// TEIE
 
+	//? 设置中断优先级
+	NVIC_SetPriority(DMA1_Stream0_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+    NVIC_EnableIRQ(DMA1_Stream0_IRQn);
+    
+
 	// 设置DMA外设地址
 	LL_DMA_SetPeriphAddress(DMA1, LL_DMA_STREAM_0, (uint32_t) &TJC_HDMI_UART->TDR);
 
-	/*接收配置*/
-	#if __HARDWARE_CONFIG__TJC_RX_ENABLE__
-	// 使能DMA USART请求
-	LL_USART_EnableDMAReq_RX(TJC_HDMI_UART); //Даем добро на запрос DMA TJC_HDMI_UART (передача и прием)
-	// 清除DMA传输完成中断与传输错误中断标志位 
-	LL_DMA_ClearFlag_TC1(DMA1);	// TCIF
-	LL_DMA_ClearFlag_TE1(DMA1);	// TEIF
-	// 使能DMA传输完成中断与传输错误中断
-	LL_DMA_EnableIT_TC(DMA1, LL_DMA_STREAM_1);	// TCIE
-	LL_DMA_EnableIT_TE(DMA1, LL_DMA_STREAM_1);	// TEIE
+	//? 接收配置
+	#if __HARDWARE_CONFIG__TJC_RX_ENABLE__ // begin of __HARDWARE_CONFIG__TJC_RX_ENABLE__
+		// 使能DMA USART请求
+		LL_USART_EnableDMAReq_RX(TJC_HDMI_UART); //Даем добро на запрос DMA TJC_HDMI_UART (передача и прием)
 
-	 //设置接收最大数据长度
-	 LL_DMA_SetDataLength(DMA1,LL_DMA_STREAM_1, 1);
-	 //设置内存地址，也就是设置接收的数据要放哪
-	 LL_DMA_SetMemoryAddress(DMA1,LL_DMA_STREAM_1, (uint32_t) &DMA_RX_BUF);
-	 // 设置DMA外设地址
-	LL_DMA_SetPeriphAddress(DMA1, LL_DMA_STREAM_0, (uint32_t) &TJC_HDMI_UART->RDR);
-	 //使能接收DMA STREAM
-	 LL_DMA_EnableStream(DMA1, LL_DMA_STREAM_1);  // 启动接收DMA
-	 #endif
+		// 清除DMA传输完成中断与传输错误中断标志位 
+		LL_DMA_ClearFlag_TC1(DMA1);  // TCIF
+		LL_DMA_ClearFlag_TE1(DMA1);  // TEIF
+		// 使能DMA传输完成中断与传输错误中断
+		LL_DMA_EnableIT_TC(DMA1, LL_DMA_STREAM_1);  // TCIE
+		LL_DMA_EnableIT_TE(DMA1, LL_DMA_STREAM_1);  // TEIE
+
+		//? 设置中断优先级
+		NVIC_SetPriority(DMA1_Stream1_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+		NVIC_EnableIRQ(DMA1_Stream1_IRQn);
+
+		LL_DMA_SetDataLength   (DMA1,LL_DMA_STREAM_1, 1);                                //设置接收最大数据长度
+		LL_DMA_SetMemoryAddress(DMA1,LL_DMA_STREAM_1, (uint32_t) &DMA_RX_BUF);           //设置内存地址，也就是设置接收的数据要放哪
+		LL_DMA_SetPeriphAddress(DMA1, LL_DMA_STREAM_0, (uint32_t) &TJC_HDMI_UART->RDR);  // 设置DMA外设地址
+
+		//使能接收DMA STREAM
+		LL_DMA_EnableStream(DMA1, LL_DMA_STREAM_1);  // 启动接收DMA
+	 #endif // end of __HARDWARE_CONFIG__TJC_RX_ENABLE__
 }
 
 void TJC_DMA_SendString_n(const char *string, uint16_t size){
@@ -288,12 +414,12 @@ void TJC_DMA_SendString_n(const char *string, uint16_t size){
     LL_DMA_SetMemoryAddress(DMA1,LL_DMA_STREAM_0, (uint32_t) &DMA_TX_BUF);
 	
 	#if 0	// DEBUG
-	printf_s_d("S1 %s", DMA_TX_BUF);
-	printf_s_d("MemoryAddr: 0x%08x\t", LL_DMA_GetMemoryAddress(DMA1, LL_DMA_STREAM_0));
-	printf_s_d("PeriphAddr: 0x%08x\t\r\n", LL_DMA_GetPeriphAddress(DMA1, LL_DMA_STREAM_0));
+		printf_s_d("S1 %s", DMA_TX_BUF);
+		printf_s_d("MemoryAddr: 0x%08x\t", LL_DMA_GetMemoryAddress(DMA1, LL_DMA_STREAM_0));
+		printf_s_d("PeriphAddr: 0x%08x\t\r\n", LL_DMA_GetPeriphAddress(DMA1, LL_DMA_STREAM_0));
 
-	printf_s_d("DMA_TX_BUF: 0x%08x\t", &DMA_TX_BUF);
-	printf_s_d("U1->TDR:    0x%08x\t\r\n", (uint32_t)&(TJC_HDMI_UART->TDR));
+		printf_s_d("DMA_TX_BUF: 0x%08x\t", &DMA_TX_BUF);
+		printf_s_d("U1->TDR:    0x%08x\t\r\n", (uint32_t)&(TJC_HDMI_UART->TDR));
 	#endif
 	
 	//使能DMA串口发送数据流
@@ -391,70 +517,50 @@ void TJC_DMA_SendCmd_sp(char *format){
 	LL_DMA_EnableStream(DMA1, LL_DMA_STREAM_0); 
 }
 //-----------------------------------------------------------------
-// void TJC_DMA_SendTxt_MAIN_n(uint8_t WindowIndex, uint8_t *string, uint8_t size)
+// void TJC_DMA_SendTxt_MAIN_n(char *string, uint8_t size)
 //-----------------------------------------------------------------
 //
-// 函数功能: 发送指令到TJC_USART1端口,并在串口屏main page中的t0或barx控件显示字符串，指定长度
-// 入口参数1: uint8_t WindowIndex: 窗口索引（0~12）
-// 入口参数2: char* string: 待显示字符串
-// 入口参数3: uint8_t size: 显示字符串长度
+// 函数功能: 发送指令到TJC_USART1端口,并在串口屏main page中的t0控件显示字符串，指定长度
+// 入口参数1: char* string: 待显示字符串
+// 入口参数2: uint8_t size: 显示字符串长度
 // 注意事项: 无
 //
 //-----------------------------------------------------------------
-void TJC_DMA_SendTxt_MAIN_n(uint8_t WindowIndex, char *string, uint8_t size){
+void TJC_DMA_SendTxt_MAIN_n(char *string, uint8_t size){
 	while(!LL_USART_IsActiveFlag_TC(TJC_HDMI_UART)); //等待发送完成
 	LL_DMA_DisableStream(DMA1, LL_DMA_STREAM_0);
-	if (WindowIndex == 0){
-		strncpy(DMA_TX_BUF, "\xff\xff\xffmain.t0.txt+=\"", 17);
-		strncpy(&DMA_TX_BUF[17], string, size);
-		strncpy(&DMA_TX_BUF[17 + size], "\"\xff\xff\xff", 4);
-		LL_DMA_SetDataLength(DMA1, LL_DMA_STREAM_0, 17 + size + 4);
-	}
-	else {
-		sprintf(DMA_TX_BUF, "\xff\xff\xffmain.bar%d.txt=\"", WindowIndex);
-		i = strlen(DMA_TX_BUF);
-		strncpy(&DMA_TX_BUF[i], string, size);
-		strncpy(&DMA_TX_BUF[i + size], "\"\xff\xff\xff", 4);
-		LL_DMA_SetDataLength(DMA1, LL_DMA_STREAM_0, i + size + 4);
-	}
+
+	strncpy(DMA_TX_BUF, "\xff\xff\xffmain.t0.txt+=\"", 17);
+	strncpy(&DMA_TX_BUF[17], string, size);
+	strncpy(&DMA_TX_BUF[17 + size], "\"\xff\xff\xff", 4);
+	LL_DMA_SetDataLength(DMA1, LL_DMA_STREAM_0, 17 + size + 4);
+
 	LL_DMA_SetMemoryAddress(DMA1,LL_DMA_STREAM_0, (uint32_t) &DMA_TX_BUF);
 	LL_DMA_EnableStream(DMA1, LL_DMA_STREAM_0); 
 }
 //-----------------------------------------------------------------
-// void TJC_DMA_SendTxt_MAIN_s(uint8_t WindowIndex, char *format, ...)
+// void TJC_DMA_SendTxt_MAIN_s(char *format, ...)
 //-----------------------------------------------------------------
 //
-// 函数功能: 发送指令到TJC_USART1端口,并在串口屏main page中的t0或barx控件显示字符串，含格式化参数
-// 入口参数1: uint8_t WindowIndex: 窗口索引（0~12）
-// 入口参数2: char* format: 待显示格式化字符串
-// 入口参数3: ... ： 格式化输入参数
+// 函数功能: 发送指令到TJC_USART1端口,并在串口屏main page中的t0控件显示字符串，含格式化参数
+// 入口参数1: char* format: 待显示格式化字符串
+// 入口参数2: ... ： 格式化输入参数
 // 注意事项: 无
 //
 //-----------------------------------------------------------------
-void TJC_DMA_SendTxt_MAIN_s(uint8_t WindowIndex, char *format, ...){
+void TJC_DMA_SendTxt_MAIN_s(char *format, ...){
 	while(!LL_USART_IsActiveFlag_TC(TJC_HDMI_UART)); //等待发送完成
 	LL_DMA_DisableStream(DMA1, LL_DMA_STREAM_0);
-	if (WindowIndex == 0){
-		strncpy(DMA_TX_BUF, "\xff\xff\xffmain.t0.txt+=\"", 17);
-		va_list arg;
-		va_start(arg, format);
-		vsprintf(&DMA_TX_BUF[17], format, arg);
-		va_end(arg);
-		i = strlen(DMA_TX_BUF);
-		strncpy(&DMA_TX_BUF[i], "\"\xff\xff\xff", 4);
-		LL_DMA_SetDataLength(DMA1, LL_DMA_STREAM_0, i + 4);
-	}
-	else {
-		sprintf(DMA_TX_BUF, "\xff\xff\xffmain.bar%d.txt=\"", WindowIndex);
-		i = strlen(DMA_TX_BUF);
-		va_list arg;
-		va_start(arg, format);
-		vsprintf(&DMA_TX_BUF[i], format, arg);
-		va_end(arg);
-		i = strlen(DMA_TX_BUF);
-		strncpy(&DMA_TX_BUF[i], "\"\xff\xff\xff", 4);
-		LL_DMA_SetDataLength(DMA1, LL_DMA_STREAM_0, i + 4);
-	}
+
+	strncpy(DMA_TX_BUF, "\xff\xff\xffmain.t0.txt+=\"", 17);
+	va_list arg;
+	va_start(arg, format);
+	vsprintf(&DMA_TX_BUF[17], format, arg);
+	va_end(arg);
+	i = strlen(DMA_TX_BUF);
+	strncpy(&DMA_TX_BUF[i], "\"\xff\xff\xff", 4);
+	LL_DMA_SetDataLength(DMA1, LL_DMA_STREAM_0, i + 4);
+
 	LL_DMA_SetMemoryAddress(DMA1,LL_DMA_STREAM_0, (uint32_t) &DMA_TX_BUF);
 	LL_DMA_EnableStream(DMA1, LL_DMA_STREAM_0); 
 }

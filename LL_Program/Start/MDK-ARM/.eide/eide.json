@@ -21,46 +21,52 @@
             "folders": []
           },
           {
-            "name": "User",
-            "files": [],
-            "folders": [
+            "name": "User_Core",
+            "files": [
               {
-                "name": "Core",
-                "files": [
-                  {
-                    "path": "../Core/Src/main.c"
-                  },
-                  {
-                    "path": "../Core/Src/gpio.c"
-                  },
-                  {
-                    "path": "../Core/Src/memorymap.c"
-                  },
-                  {
-                    "path": "../Core/Src/usart.c"
-                  },
-                  {
-                    "path": "../Core/Src/stm32h7xx_it.c"
-                  },
-                  {
-                    "path": "../Core/Inc/__HARDWARE_CONFIG__.h"
-                  },
-                  {
-                    "path": "../Core/Src/bsp_timer.c"
-                  },
-                  {
-                    "path": "../Core/Src/tim.c"
-                  },
-                  {
-                    "path": "../Core/Src/dma.c"
-                  },
-                  {
-                    "path": "../Core/Src/adc.c"
-                  }
-                ],
-                "folders": []
+                "path": "../Core/Inc/main.h"
+              },
+              {
+                "path": "../User/Src/bsp_timer.c"
+              },
+              {
+                "path": "../User/Src/config_init.c"
+              },
+              {
+                "path": "../User/Inc/__HARDWARE_CONFIG__.h"
+              },
+              {
+                "path": "../Core/Src/main.c"
               }
-            ]
+            ],
+            "folders": []
+          },
+          {
+            "name": "CubeMX_Core",
+            "files": [
+              {
+                "path": "../Core/Src/adc.c"
+              },
+              {
+                "path": "../Core/Src/dma.c"
+              },
+              {
+                "path": "../Core/Src/gpio.c"
+              },
+              {
+                "path": "../Core/Src/memorymap.c"
+              },
+              {
+                "path": "../Core/Src/stm32h7xx_it.c"
+              },
+              {
+                "path": "../Core/Src/tim.c"
+              },
+              {
+                "path": "../Core/Src/usart.c"
+              }
+            ],
+            "folders": []
           }
         ]
       },
@@ -129,6 +135,12 @@
           },
           {
             "path": "../Hardware/Source/TFTLCD.c"
+          },
+          {
+            "path": "../Hardware/Source/gpu_temp_adc.c"
+          },
+          {
+            "path": "../Hardware/Source/dma_adc.c"
           }
         ],
         "folders": []
@@ -305,7 +317,8 @@
           ".cmsis/include",
           "RTE/_START",
           "../Hardware/Include",
-          "../Resource/Inc"
+          "../Resource/Inc",
+          "../User/Inc"
         ],
         "libList": [],
         "defineList": [

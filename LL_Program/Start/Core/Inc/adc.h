@@ -30,18 +30,18 @@ extern "C" {
 
 /* USER CODE BEGIN Includes */
 
+#include "gpu_temp_adc.h"
+
 /* USER CODE END Includes */
 
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
 
+void MX_ADC1_Init(void);
 void MX_ADC3_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
-double MPU_Temperature_Get();
-void MPU_Temperature_Show();
 
 /* USER CODE END Prototypes */
 

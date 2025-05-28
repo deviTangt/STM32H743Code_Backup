@@ -16,6 +16,41 @@ uint32_t bspTick_mark_2;
 //*******************************// define function     //************************************//
 
 //-----------------------------------------------------------------
+// inline void bsp_Timer_Config_Init(void)
+//-----------------------------------------------------------------
+//
+// 函数功能: 初始化板级支持包定时器系统配置
+// 入口参数1: 无
+// 返 回 值: 无
+// 注意事项: 无
+//
+//-----------------------------------------------------------------
+inline void bsp_Timer_Config_Init(void){
+	//? 初始化时钟
+	LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM7);
+
+	//? 配置中断
+	NVIC_SetPriority(TIM7_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),10, 0));
+	NVIC_EnableIRQ(TIM7_IRQn);
+
+	//? 配置定时器结构体
+	LL_TIM_InitTypeDef TIM_InitStruct             = {0};
+	                   TIM_InitStruct.Prescaler   = 239;                    // 预分频
+	                   TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;  // 计数模式：向上计数
+	                   TIM_InitStruct.Autoreload  = 65535;                  // 自动重装载值
+	LL_TIM_Init(TIM7, &TIM_InitStruct);
+
+	//? 其他配置
+	LL_TIM_DisableARRPreload(TIM7);                     // 启动自动装载模式
+	LL_TIM_SetTriggerOutput (TIM7, LL_TIM_TRGO_RESET);  // 复位更新
+	LL_TIM_DisableMasterSlaveMode(TIM7);
+
+	//? 初始化板级支持包定时器
+	#if __HARDWARE_CONFIG__BSP_TIMER_ENABLE__ // begin of __HARDWARE_CONFIG__BSP_TIMER_ENABLE__
+		bsp_Timer_Init(); //! Enable BspTick Timer
+	#endif // end of __HARDWARE_CONFIG__BSP_TIMER_ENABLE__
+}
+//-----------------------------------------------------------------
 // inline void bsp_Timer_Init(void)
 //-----------------------------------------------------------------
 //
@@ -62,7 +97,7 @@ inline void Update_SystemTick(void)
 	}
 }
 //-----------------------------------------------------------------
-// inline void Update_SystemTick(void)
+// inline void delay_us(uint32_t cnt)
 //-----------------------------------------------------------------
 //
 // 函数功能: 微秒级软件堵塞延时
@@ -76,7 +111,7 @@ inline void delay_us(uint32_t cnt){
 	while(Get_SystemTimer() < temp);
 }
 //-----------------------------------------------------------------
-// inline void Update_SystemTick(void)
+// inline void delay_ms(uint32_t cnt)
 //-----------------------------------------------------------------
 //
 // 函数功能: 毫秒级软件堵塞延时
