@@ -1,7 +1,7 @@
 #include "__HARDWARE_CONFIG__.h"
-#if __HARDWARE_CONFIG__DMA_ADC_ENABLE__	// begin of __HARDWARE_CONFIG__DMA_ADC_ENABLE__
+#if __HARDWARE_CONFIG__DMA_ADC1_ENABLE__	// begin of __HARDWARE_CONFIG__DMA_ADC1_ENABLE__
 //*******************************// include _h files    //************************************//
-#include "dma_adc.h"
+#include "dma_adc1.h"
 //*******************************// define parameters   //************************************//
 //*******************************// parameters          //************************************//
 
@@ -58,13 +58,13 @@ void Samp_Adc_Init(uint32_t buff_Addr, uint32_t trans_Num){
   	
 	LL_RCC_SetADCClockSource(LL_RCC_ADC_CLKSOURCE_PLL2P);	// 设置ADC时钟源
 	LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_ADC12);	// 使能ADC时钟
-	#if __HARDWARE_CONFIG__SAMPLE_ADC_DMA_ENABLE__ // begin of __HARDWARE_CONFIG__SAMPLE_ADC_DMA_ENABLE__
+	#if __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__ // begin of __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__
 		LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_DMA1); // DMA时钟
-	#endif // end of __HARDWARE_CONFIG__SAMPLE_ADC_DMA_ENABLE__
+	#endif // end of __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__
 
 	//? 配置ADCGPIO初始化
 	LL_GPIO_InitTypeDef LL_GPIO_Struct      = {0};
-	                    LL_GPIO_Struct.Pin  = LL_GPIO_PIN_0|LL_GPIO_PIN_3|LL_GPIO_PIN_4|LL_GPIO_PIN_6;
+	                    LL_GPIO_Struct.Pin  = LL_GPIO_PIN_3|LL_GPIO_PIN_4|LL_GPIO_PIN_6;
 	                    LL_GPIO_Struct.Mode = LL_GPIO_MODE_ANALOG;
 	                    LL_GPIO_Struct.Pull = LL_GPIO_PULL_NO;
 	LL_GPIO_Init(GPIOA, &LL_GPIO_Struct);
@@ -80,7 +80,7 @@ void Samp_Adc_Init(uint32_t buff_Addr, uint32_t trans_Num){
 	LL_GPIO_Init(GPIOC, &LL_GPIO_Struct);
 
 	//? DMA配置
-	#if __HARDWARE_CONFIG__SAMPLE_ADC_DMA_ENABLE__ // begin of __HARDWARE_CONFIG__SAMPLE_ADC_DMA_ENABLE__
+	#if __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__ // begin of __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__
 		//? DMA结构体配置 
 		LL_DMA_InitTypeDef LL_DMA_Struct                        = {0};
 		                   LL_DMA_Struct.PeriphRequest          = LL_DMAMUX1_REQ_ADC1;                // DMA请求外设：ADC1
@@ -102,7 +102,7 @@ void Samp_Adc_Init(uint32_t buff_Addr, uint32_t trans_Num){
 		NVIC_SetPriority(DMA1_Stream2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 0));
 		NVIC_EnableIRQ(DMA1_Stream2_IRQn);
 		LL_DMA_DisableStream(DMA1, LL_DMA_STREAM_2);
-	#endif // end of __HARDWARE_CONFIG__SAMPLE_ADC_DMA_ENABLE__
+	#endif // end of __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__
 
 	//? ADC初始化 
 	// 退出掉电模式
@@ -175,14 +175,14 @@ void Samp_Adc_Init(uint32_t buff_Addr, uint32_t trans_Num){
 	ADC1->PCSEL |= (1UL << (__LL_ADC_CHANNEL_TO_DECIMAL_NB(ADC_Sequence_Channel_5) & 0x1FUL));  
 
 	//? 设置ADC传输方式
-	#if __HARDWARE_CONFIG__SAMPLE_ADC_DMA_ENABLE__ // begin of __HARDWARE_CONFIG__SAMPLE_ADC_DMA_ENABLE__
+	#if __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__ // begin of __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__
 		LL_ADC_REG_SetDataTransferMode(ADC1, LL_ADC_REG_DMA_TRANSFER_UNLIMITED);						  // DMA无限制传输
 	#else
 		LL_ADC_REG_SetDataTransferMode(ADC1, LL_ADC_REG_DR_TRANSFER);                                     // 数据寄存器传输
 		LL_ADC_EnableIT_EOC           (ADC1);                                                             // 使能E0C中断
 		NVIC_SetPriority              (ADC_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 0));  // 设置中断优先级
 		NVIC_EnableIRQ                (ADC_IRQn);                                                         // 开始中断服务函数
-	#endif // end of __HARDWARE_CONFIG__SAMPLE_ADC_DMA_ENABLE__
+	#endif // end of __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__
 
 	//? 初始化采样定时器 
 	AD_TIM4_Init();
@@ -200,9 +200,9 @@ void Samp_Adc_Init(uint32_t buff_Addr, uint32_t trans_Num){
 //-----------------------------------------------------------------
 void Start_Sample()
 {
-	#if __HARDWARE_CONFIG__SAMPLE_ADC_DMA_ENABLE__ // begin of __HARDWARE_CONFIG__SAMPLE_ADC_DMA_ENABLE__	
+	#if __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__ // begin of __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__	
 		LL_DMA_EnableStream(DMA1, LL_DMA_STREAM_2);						 // 使能DMA
-	#endif // end of __HARDWARE_CONFIG__SAMPLE_ADC_DMA_ENABLE__
+	#endif // end of __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__
 
 	LL_ADC_Enable             (ADC1);                                    // 使能ADC
 	while                     (LL_ADC_IsActiveFlag_ADRDY(ADC1) != SET);  // 等待ADC准备就绪
@@ -227,13 +227,13 @@ void Stop_Sample()
 	LL_ADC_Disable            (ADC1);                                       // 关闭ADC
 	LL_ADC_EnableDeepPowerDown(ADC1);                                       // 令ADC处于低功耗状态
 
-	#if __HARDWARE_CONFIG__SAMPLE_ADC_DMA_ENABLE__ // begin of __HARDWARE_CONFIG__SAMPLE_ADC_DMA_ENABLE__
+	#if __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__ // begin of __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__
 		LL_DMA_DisableStream(DMA1, LL_DMA_STREAM_2);  // 关闭DMA通道
 		LL_DMA_ClearFlag_TC0(DMA1);                   // 清除TC标志位
-	#endif // end of __HARDWARE_CONFIG__SAMPLE_ADC_DMA_ENABLE__
+	#endif // end of __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__
 }
  
-#if __HARDWARE_CONFIG__SAMPLE_ADC_DMA_ENABLE__ // begin of __HARDWARE_CONFIG__SAMPLE_ADC_DMA_ENABLE__
+#if __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__ // begin of __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__
 //-----------------------------------------------------------------
 // void DMA1_Stream2_IRQHandler_Func()
 //-----------------------------------------------------------------
@@ -271,8 +271,8 @@ void ADC_IRQHandler(void)
 	}
 }
  
-#endif // end of __HARDWARE_CONFIG__SAMPLE_ADC_DMA_ENABLE__
+#endif // end of __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__
 
 
 //*******************************// end_c               //************************************//
-#endif	// end of __HARDWARE_CONFIG__DMA_ADC_ENABLE__
+#endif	// end of __HARDWARE_CONFIG__DMA_ADC1_ENABLE__

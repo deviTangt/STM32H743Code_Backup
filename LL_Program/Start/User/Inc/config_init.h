@@ -16,15 +16,27 @@
 #include "TJC_USART.h"
 #include "TFTLCD_Init.h"
 #include "TFTLCD.h"
-#include "dma_adc.h"
-#include "user_timer.h"
+#include "dma_adc1.h"
+#include "user_timer1.h"
+#include "user_timer2.h"
+#include "user_timer3.h"
+#include "user_timer5.h"
+#include "user_timer6.h"
+#include "user_timer8.h"
+#include "user_timer12.h"
+#include "user_timer13.h"
+#include "user_timer14.h"
+#include "user_timer15.h"
+#include "user_timer16.h"
+#include "user_timer17.h"
 //*******************************// define statement        //************************************//
 //*******************************// extern parameters       //************************************//
 //*******************************// define structure unity  //************************************//
 //*******************************// define parameters       //************************************//
 //*******************************// extern function         //************************************//
 
-void config_init();
+extern inline void config_init();
+extern inline void config_user_timer_init();
 
 //*******************************// end_h                   //************************************//
 #endif	// end of __CONFIG_INIT_H__

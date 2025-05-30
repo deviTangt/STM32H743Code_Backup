@@ -49,7 +49,6 @@ void MX_ADC1_Init(void)
   /**ADC1 GPIO Configuration
   PC0   ------> ADC1_INP10
   PC1   ------> ADC1_INN10
-  PA0   ------> ADC1_INP16
   PA3   ------> ADC1_INP15
   PA4   ------> ADC1_INP18
   PA6   ------> ADC1_INP3
@@ -61,7 +60,7 @@ void MX_ADC1_Init(void)
   GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
   LL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  GPIO_InitStruct.Pin = LL_GPIO_PIN_0|LL_GPIO_PIN_3|LL_GPIO_PIN_4|LL_GPIO_PIN_6;
+  GPIO_InitStruct.Pin = LL_GPIO_PIN_3|LL_GPIO_PIN_4|LL_GPIO_PIN_6;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
   LL_GPIO_Init(GPIOA, &GPIO_InitStruct);

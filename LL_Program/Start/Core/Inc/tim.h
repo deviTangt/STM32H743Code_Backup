@@ -36,10 +36,20 @@ extern "C" {
 
 /* USER CODE END Private defines */
 
+void MX_TIM1_Init(void);
 void MX_TIM2_Init(void);
 void MX_TIM3_Init(void);
 void MX_TIM4_Init(void);
+void MX_TIM5_Init(void);
+void MX_TIM6_Init(void);
 void MX_TIM7_Init(void);
+void MX_TIM8_Init(void);
+void MX_TIM12_Init(void);
+void MX_TIM13_Init(void);
+void MX_TIM14_Init(void);
+void MX_TIM15_Init(void);
+void MX_TIM16_Init(void);
+void MX_TIM17_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 

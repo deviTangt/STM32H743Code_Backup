@@ -20,13 +20,13 @@
 #include "main.h"
 #include "dma.h"
 #include "memorymap.h"
-#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "config_init.h"
+#include "visualize_show.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -61,6 +61,7 @@ static void MPU_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 uint32_t t = 0;
+
 /* USER CODE END 0 */
 
 /**
@@ -105,8 +106,6 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_TIM2_Init();
-  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
   config_init();  //! various periph initialized
 
@@ -125,28 +124,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    printf_s(10, "timer3_call_cnt:%d", timer3_call_cnt);
-
-    if (RX_tick > Rx_tick_pre + 100){
-        Rx_tick_pre = RX_tick;
-        /* 日志打印收到的数据 */ 
-        printf("Main Receive:%*s\r\n", DMA_RX_Length, DMA_RX_BUF);
-        
-        DMA_RX_Length = 0;
-    }
-
-    
-    #if __HARDWARE_CONFIG__DMA_ADC_ENABLE__ // begin of __HARDWARE_CONFIG__DMA_ADC_ENABLE__
-      printf_s(4, "dma_cnt:%d,%0d,%0d", dma_adc_finish_cnt / 1000000, dma_adc_finish_cnt / 1000 % 1000, dma_adc_finish_cnt % 1000);
-      for (uint8_t i = 0;i < 2;i ++){
-        printf_s(5 + i, "AD_val %d:%dmV", i, (DMA_ADC_RX_BUF[i] * 3300) >> 16);
-      }
-    #endif // end of __HARDWARE_CONFIG__DMA_ADC_ENABLE__
-    
-
-    //*******************************// delay logic                 //************************************//
-    delay_ms(10);                                       
-                                                                                                                                                                                                                                           
+    visualize_show();   //! visualize debug
   }
   /* USER CODE END 3 */
 }

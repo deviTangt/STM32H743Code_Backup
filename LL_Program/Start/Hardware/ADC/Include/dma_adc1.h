@@ -1,7 +1,7 @@
 #include "__HARDWARE_CONFIG__.h"
-#if __HARDWARE_CONFIG__DMA_ADC_ENABLE__	// begin of __HARDWARE_CONFIG__DMA_ADC_ENABLE__
-#ifndef __DMA_ADC_H__	// begin of __DMA_ADC_H__
-#define __DMA_ADC_H__
+#if __HARDWARE_CONFIG__DMA_ADC1_ENABLE__	// begin of __HARDWARE_CONFIG__DMA_ADC1_ENABLE__
+#ifndef __DMA_ADC1_H__	// begin of __DMA_ADC1_H__
+#define __DMA_ADC1_H__
 //*******************************// include extern .h files //************************************//
 #include "main.h"
 //*******************************// define statement        //************************************//
@@ -45,5 +45,5 @@ void Stop_Sample(void);
 void DMA1_Stream2_IRQHandler_Func();
 
 //*******************************// end_h                   //************************************//
-#endif	// end of __DMA_ADC_H__
-#endif	// end of __HARDWARE_CONFIG__DMA_ADC_ENABLE__
+#endif	// end of __DMA_ADC1_H__
+#endif	// end of __HARDWARE_CONFIG__DMA_ADC1_ENABLE__

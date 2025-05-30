@@ -53,7 +53,18 @@ extern "C" {
 #include "bsp_timer.h"
 #include "TJC_USART.h"
 #include "LED.h"
-#include "user_timer.h"
+#include "user_timer1.h"
+#include "user_timer2.h"
+#include "user_timer3.h"
+#include "user_timer5.h"
+#include "user_timer6.h"
+#include "user_timer8.h"
+#include "user_timer12.h"
+#include "user_timer13.h"
+#include "user_timer14.h"
+#include "user_timer15.h"
+#include "user_timer16.h"
+#include "user_timer17.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

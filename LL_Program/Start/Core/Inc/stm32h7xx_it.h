@@ -27,15 +27,9 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
-#if __HARDWARE_CONFIG__KEY_ENABLE__ // begin of __HARDWARE_CONFIG__KEY_ENABLE__
-  #include "KEY.h"
-  #include "LED.h"
-#endif // end of __HARDWARE_CONFIG__KEY_ENABLE__
-
-#if __HARDWARE_CONFIG__DMA_ADC_ENABLE__	// begin of __HARDWARE_CONFIG__DMA_ADC_ENABLE__
-  #include "dma_adc.h"
-#endif // end of __HARDWARE_CONFIG__DMA_ADC_ENABLE__
+#include "KEY.h"
+#include "LED.h"
+#include "dma_adc1.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -68,11 +62,21 @@ void DMA1_Stream1_IRQHandler(void);
 void DMA1_Stream2_IRQHandler(void);
 void ADC_IRQHandler(void);
 void EXTI9_5_IRQHandler(void);
+void TIM1_BRK_IRQHandler(void);
+void TIM1_UP_IRQHandler(void);
 void TIM2_IRQHandler(void);
 void TIM3_IRQHandler(void);
 void TIM4_IRQHandler(void);
+void TIM8_BRK_TIM12_IRQHandler(void);
+void TIM8_UP_TIM13_IRQHandler(void);
+void TIM8_TRG_COM_TIM14_IRQHandler(void);
+void TIM5_IRQHandler(void);
+void TIM6_DAC_IRQHandler(void);
 void TIM7_IRQHandler(void);
 void UART7_IRQHandler(void);
+void TIM15_IRQHandler(void);
+void TIM16_IRQHandler(void);
+void TIM17_IRQHandler(void);
 /* USER CODE BEGIN EFP */
 
 /* USER CODE END EFP */
