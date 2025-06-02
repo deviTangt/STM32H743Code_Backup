@@ -41,6 +41,7 @@
 
 extern inline void config_init();
 extern inline void config_user_timer_init();
+extern inline void config_adc_sample_init();
 
 //*******************************// end_h                   //************************************//
 #endif	// end of __CONFIG_INIT_H__

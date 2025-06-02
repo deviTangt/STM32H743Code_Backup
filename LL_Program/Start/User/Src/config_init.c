@@ -7,7 +7,7 @@
 
 //*******************************// define parameters   //************************************//
 //*******************************// parameters          //************************************//
-//*******************************// define function     //************************************//
+//*******************************// config main         //************************************//
 
 //-----------------------------------------------------------------
 // inline void config_init()
@@ -26,6 +26,37 @@ inline void config_init(){
     #endif // end of __HARDWARE_CONFIG__TJC_USART_ENABLE__  
 
     //? ADC1 Initialized
+    config_adc_sample_init();
+
+    //? gpu temperature sensor adc config
+    #if __HARDWARE_CONFIG__GPU_TEMP_ADC_ENABLE__ // begin of __HARDWARE_CONFIG__GPU_TEMP_ADC_ENABLE__
+        gpu_temp_adc3_config_init();
+    #endif // end of __HARDWARE_CONFIG__GPU_TEMP_ADC_ENABLE__
+    
+    //? TFT LCD Initialized
+    #if __HARDWARE_CONFIG__TFTLCD_ENABLE__ // begin of __HARDWARE_CONFIG__TFTLCD_ENABLE__
+        LCD_Init();
+        LCD_Fill(0, 0, LCD_W, LCD_H, WHITE);
+        LCD_ShowPicture(0, 0, 128, 134, gImage_HuaXiaoKe);
+    #endif // end of __HARDWARE_CONFIG__TFTLCD_ENABLE__
+
+    //? User Timer Initialized
+    config_user_timer_init();
+}
+
+//*******************************// define function     //************************************//
+
+//-----------------------------------------------------------------
+// inline void config_adc_sample_init()
+//-----------------------------------------------------------------
+//
+// Function Usage  : initialize sampler adc(including adc1, 2, 3 if enabled)
+// Input Arugment 1: None
+// Return Value    : None
+// Something Notice: None
+//
+//-----------------------------------------------------------------
+inline void config_adc_sample_init(){
     #if __HARDWARE_CONFIG__DMA_ADC1_ENABLE__ // begin of __HARDWARE_CONFIG__DMA_ADC1_ENABLE__
         Samp_Adc1_Init((uint32_t)&DMA_ADC1_RX_BUF, ADC1_Sequence_Channel_Num);
         #if 1   // 是否开始采样
@@ -46,21 +77,6 @@ inline void config_init(){
             Start_Sample_adc3();
         #endif
     #endif // end of __HARDWARE_CONFIG__DMA_ADC3_ENABLE__
-
-    //? gpu temperature sensor adc config
-    #if __HARDWARE_CONFIG__GPU_TEMP_ADC_ENABLE__ // begin of __HARDWARE_CONFIG__GPU_TEMP_ADC_ENABLE__
-        gpu_temp_adc3_config_init();
-    #endif // end of __HARDWARE_CONFIG__GPU_TEMP_ADC_ENABLE__
-    
-    //? TFT LCD Initialized
-    #if __HARDWARE_CONFIG__TFTLCD_ENABLE__ // begin of __HARDWARE_CONFIG__TFTLCD_ENABLE__
-        LCD_Init();
-        LCD_Fill(0, 0, LCD_W, LCD_H, WHITE);
-        LCD_ShowPicture(0, 0, 128, 134, gImage_HuaXiaoKe);
-    #endif // end of __HARDWARE_CONFIG__TFTLCD_ENABLE__
-
-    //? User Timer Initialized
-    config_user_timer_init();
 }
 
 //-----------------------------------------------------------------

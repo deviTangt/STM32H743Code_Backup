@@ -41,44 +41,48 @@ inline void timer5_config_init(){
 	LL_TIM_SetTriggerOutput  (TIM5, LL_TIM_TRGO_RESET);            // 复位更新
 	LL_TIM_DisableMasterSlaveMode(TIM5);
 
-    //? 标志位
-	LL_TIM_ClearFlag_UPDATE(TIM5);  // 清除向上计数溢出标志位
-  LL_TIM_EnableIT_UPDATE (TIM5);  // 使能定时器向上计数中断
+  //? 标志位
+	#if __HARDWARE_CONFIG__TIMER5_INT_UPDATE_ENABLE__ // begin of __HARDWARE_CONFIG__TIMER5_INT_UPDATE_ENABLE__
+		LL_TIM_ClearFlag_UPDATE(TIM5);  // 清除向上计数溢出标志位
+		LL_TIM_EnableIT_UPDATE (TIM5);  // 使能定时器向上计数中断
+  #endif // end of __HARDWARE_CONFIG__TIMER5_INT_UPDATE_ENABLE__
 }
 //-----------------------------------------------------------------
 // inline void timer5_start()
 //-----------------------------------------------------------------
 //
-// 函数功能: 开启定时器3
+// 函数功能: 开启定时器5
 // 入口参数1: 无
 // 返 回 值: 无
 // 注意事项: 无
 //
 //-----------------------------------------------------------------
 inline void timer5_start(){
+  if(__HARDWARE_CONFIG__TIMER5_INT_UPDATE_ENABLE__)
     LL_TIM_ClearFlag_UPDATE(TIM5);  // 清除向上计数溢出标志位
-    LL_TIM_EnableCounter   (TIM5);  // 使能定时器开始计数
+  LL_TIM_EnableCounter   (TIM5);  // 使能定时器开始计数
 }
 //-----------------------------------------------------------------
 // inline void timer5_stop()
 //-----------------------------------------------------------------
 //
-// 函数功能: 关闭定时器3
+// 函数功能: 关闭定时器5
 // 入口参数1: 无
 // 返 回 值: 无
 // 注意事项: 无
 //
 //-----------------------------------------------------------------
 inline void timer5_stop(){
+  if(__HARDWARE_CONFIG__TIMER5_INT_UPDATE_ENABLE__)
     LL_TIM_ClearFlag_UPDATE(TIM5);   // 清除向上计数溢出标志位
-    LL_TIM_DisableCounter   (TIM5);  // 关闭定时器计数
+  LL_TIM_DisableCounter   (TIM5);  // 关闭定时器计数
 }
 
 //-----------------------------------------------------------------
 // inline void TIM5_IRQHandler_Func(void)
 //-----------------------------------------------------------------
 //
-// 函数功能: 定时器3中断服务函数
+// 函数功能: 定时器5中断服务函数
 // 入口参数1: 无
 // 返 回 值: 无
 // 注意事项: 将此函数加入定时器中断服务函数TIM5_IRQHandler(void)中

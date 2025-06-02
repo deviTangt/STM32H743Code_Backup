@@ -41,44 +41,48 @@ inline void timer16_config_init(){
 	LL_TIM_SetTriggerOutput  (TIM16, LL_TIM_TRGO_RESET);            // 复位更新
 	LL_TIM_DisableMasterSlaveMode(TIM16);
 
-    //? 标志位
-	LL_TIM_ClearFlag_UPDATE(TIM16);  // 清除向上计数溢出标志位
-    LL_TIM_EnableIT_UPDATE (TIM16);  // 使能定时器向上计数中断
+  //? 标志位
+	#if __HARDWARE_CONFIG__TIMER16_INT_UPDATE_ENABLE__ // begin of __HARDWARE_CONFIG__TIMER16_INT_UPDATE_ENABLE__
+		LL_TIM_ClearFlag_UPDATE(TIM16);  // 清除向上计数溢出标志位
+		LL_TIM_EnableIT_UPDATE (TIM16);  // 使能定时器向上计数中断
+  #endif // end of __HARDWARE_CONFIG__TIMER16_INT_UPDATE_ENABLE__
 }
 //-----------------------------------------------------------------
 // inline void timer16_start()
 //-----------------------------------------------------------------
 //
-// 函数功能: 开启定时器3
+// 函数功能: 开启定时器16
 // 入口参数1: 无
 // 返 回 值: 无
 // 注意事项: 无
 //
 //-----------------------------------------------------------------
 inline void timer16_start(){
+  if(__HARDWARE_CONFIG__TIMER16_INT_UPDATE_ENABLE__)
     LL_TIM_ClearFlag_UPDATE(TIM16);  // 清除向上计数溢出标志位
-    LL_TIM_EnableCounter   (TIM16);  // 使能定时器开始计数
+  LL_TIM_EnableCounter   (TIM16);  // 使能定时器开始计数
 }
 //-----------------------------------------------------------------
 // inline void timer16_stop()
 //-----------------------------------------------------------------
 //
-// 函数功能: 关闭定时器3
+// 函数功能: 关闭定时器16
 // 入口参数1: 无
 // 返 回 值: 无
 // 注意事项: 无
 //
 //-----------------------------------------------------------------
 inline void timer16_stop(){
+  if(__HARDWARE_CONFIG__TIMER16_INT_UPDATE_ENABLE__)
     LL_TIM_ClearFlag_UPDATE(TIM16);   // 清除向上计数溢出标志位
-    LL_TIM_DisableCounter   (TIM16);  // 关闭定时器计数
+  LL_TIM_DisableCounter   (TIM16);  // 关闭定时器计数
 }
 
 //-----------------------------------------------------------------
 // inline void TIM16_IRQHandler_Func(void)
 //-----------------------------------------------------------------
 //
-// 函数功能: 定时器3中断服务函数
+// 函数功能: 定时器16中断服务函数
 // 入口参数1: 无
 // 返 回 值: 无
 // 注意事项: 将此函数加入定时器中断服务函数TIM16_IRQHandler(void)中

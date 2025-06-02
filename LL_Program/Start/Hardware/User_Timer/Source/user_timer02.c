@@ -66,8 +66,11 @@ inline void timer2_config_init(){ // 输入捕获
 	LL_TIM_IC_SetPolarity         (TIM2, LL_TIM_CHANNEL_CH1, LL_TIM_IC_POLARITY_RISING);   // 上升沿触发
 
     //? 标志位
-	LL_TIM_ClearFlag_UPDATE(TIM2);                     // 清除向上计数溢出标志位
-	LL_TIM_EnableIT_UPDATE  (TIM2);                    // 使能定时器向上计数中断
+	#if __HARDWARE_CONFIG__TIMER2_INT_UPDATE_ENABLE__ // begin of __HARDWARE_CONFIG__TIMER2_INT_UPDATE_ENABLE__
+		LL_TIM_ClearFlag_UPDATE(TIM2);  // 清除向上计数溢出标志位
+		LL_TIM_EnableIT_UPDATE (TIM2);  // 使能定时器向上计数中断
+  	#endif // end of __HARDWARE_CONFIG__TIMER2_INT_UPDATE_ENABLE__
+
 	LL_TIM_ClearFlag_CC1    (TIM2);                    // 清除捕获标志位
 	LL_TIM_EnableIT_CC1     (TIM2);                    // 捕获通道使能
 	LL_TIM_CC_EnableChannel(TIM2,LL_TIM_CHANNEL_CH1);  // 通道使能
@@ -76,28 +79,30 @@ inline void timer2_config_init(){ // 输入捕获
 // inline void timer2_start()
 //-----------------------------------------------------------------
 //
-// 函数功能: 开启定时器3
+// 函数功能: 开启定时器2
 // 入口参数1: 无
 // 返 回 值: 无
 // 注意事项: 无
 //
 //-----------------------------------------------------------------
 inline void timer2_start(){
-    LL_TIM_ClearFlag_UPDATE(TIM2);  // 清除向上计数溢出标志位
+    if(__HARDWARE_CONFIG__TIMER2_INT_UPDATE_ENABLE__)
+		LL_TIM_ClearFlag_UPDATE(TIM2);  // 清除向上计数溢出标志位
     LL_TIM_EnableCounter   (TIM2);  // 使能定时器开始计数
 }
 //-----------------------------------------------------------------
 // inline void timer2_stop()
 //-----------------------------------------------------------------
 //
-// 函数功能: 关闭定时器3
+// 函数功能: 关闭定时器2
 // 入口参数1: 无
 // 返 回 值: 无
 // 注意事项: 无
 //
 //-----------------------------------------------------------------
 inline void timer2_stop(){
-    LL_TIM_ClearFlag_UPDATE(TIM2);   // 清除向上计数溢出标志位
+    if(__HARDWARE_CONFIG__TIMER2_INT_UPDATE_ENABLE__)
+		LL_TIM_ClearFlag_UPDATE(TIM2);   // 清除向上计数溢出标志位
     LL_TIM_DisableCounter   (TIM2);  // 关闭定时器计数
 }
 
@@ -105,7 +110,7 @@ inline void timer2_stop(){
 // inline void TIM2_IRQHandler_Func(void)
 //-----------------------------------------------------------------
 //
-// 函数功能: 定时器3中断服务函数
+// 函数功能: 定时器2中断服务函数
 // 入口参数1: 无
 // 返 回 值: 无
 // 注意事项: 将此函数加入定时器中断服务函数TIM2_IRQHandler(void)中

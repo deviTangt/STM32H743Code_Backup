@@ -64,6 +64,7 @@ void visualize_show(){
       }
     #endif // end of __HARDWARE_CONFIG__DMA_ADC3_ENABLE__
     
+    //printf_s(15, "timer12_call_cnt:%d", timer12_call_cnt);
 }
 
 //*******************************// end_c               //************************************//

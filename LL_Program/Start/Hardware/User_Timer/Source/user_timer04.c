@@ -41,36 +41,40 @@ inline void timer4_config_init(){
 	LL_TIM_SetTriggerOutput  (TIM4, LL_TIM_TRGO_RESET);            // 复位更新
 	LL_TIM_DisableMasterSlaveMode(TIM4);
 
-    //? 标志位
-	LL_TIM_ClearFlag_UPDATE(TIM4);  // 清除向上计数溢出标志位
-  LL_TIM_EnableIT_UPDATE (TIM4);  // 使能定时器向上计数中断
+  //? 标志位
+	#if __HARDWARE_CONFIG__TIMER4_INT_UPDATE_ENABLE__ // begin of __HARDWARE_CONFIG__TIMER4_INT_UPDATE_ENABLE__
+		LL_TIM_ClearFlag_UPDATE(TIM4);  // 清除向上计数溢出标志位
+		LL_TIM_EnableIT_UPDATE (TIM4);  // 使能定时器向上计数中断
+  #endif // end of __HARDWARE_CONFIG__TIMER4_INT_UPDATE_ENABLE__
 }
 //-----------------------------------------------------------------
 // inline void timer4_start()
 //-----------------------------------------------------------------
 //
-// 函数功能: 开启定时器3
+// 函数功能: 开启定时器4
 // 入口参数1: 无
 // 返 回 值: 无
 // 注意事项: 无
 //
 //-----------------------------------------------------------------
 inline void timer4_start(){
-    LL_TIM_ClearFlag_UPDATE(TIM4);  // 清除向上计数溢出标志位
+    if(__HARDWARE_CONFIG__TIMER4_INT_UPDATE_ENABLE__)
+      LL_TIM_ClearFlag_UPDATE(TIM4);  // 清除向上计数溢出标志位
     LL_TIM_EnableCounter   (TIM4);  // 使能定时器开始计数
 }
 //-----------------------------------------------------------------
 // inline void timer4_stop()
 //-----------------------------------------------------------------
 //
-// 函数功能: 关闭定时器3
+// 函数功能: 关闭定时器4
 // 入口参数1: 无
 // 返 回 值: 无
 // 注意事项: 无
 //
 //-----------------------------------------------------------------
 inline void timer4_stop(){
-    LL_TIM_ClearFlag_UPDATE(TIM4);   // 清除向上计数溢出标志位
+    if(__HARDWARE_CONFIG__TIMER4_INT_UPDATE_ENABLE__)
+      LL_TIM_ClearFlag_UPDATE(TIM4);   // 清除向上计数溢出标志位
     LL_TIM_DisableCounter   (TIM4);  // 关闭定时器计数
 }
 
@@ -78,7 +82,7 @@ inline void timer4_stop(){
 // inline void TIM4_IRQHandler_Func(void)
 //-----------------------------------------------------------------
 //
-// 函数功能: 定时器3中断服务函数
+// 函数功能: 定时器4中断服务函数
 // 入口参数1: 无
 // 返 回 值: 无
 // 注意事项: 将此函数加入定时器中断服务函数TIM4_IRQHandler(void)中

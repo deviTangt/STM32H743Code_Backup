@@ -41,9 +41,11 @@ inline void timer3_config_init(){
 	LL_TIM_SetTriggerOutput       (TIM3, LL_TIM_TRGO_RESET);            // 复位更新
 	LL_TIM_DisableMasterSlaveMode(TIM3);                                // 禁用主从模式
 
-    //? 标志位
-	LL_TIM_ClearFlag_UPDATE(TIM3);  // 清除向上计数溢出标志位
-    LL_TIM_EnableIT_UPDATE (TIM3);  // 使能定时器向上计数中断
+  //? 标志位
+	#if __HARDWARE_CONFIG__TIMER3_INT_UPDATE_ENABLE__ // begin of __HARDWARE_CONFIG__TIMER3_INT_UPDATE_ENABLE__
+		LL_TIM_ClearFlag_UPDATE(TIM3);  // 清除向上计数溢出标志位
+		LL_TIM_EnableIT_UPDATE (TIM3);  // 使能定时器向上计数中断
+  #endif // end of __HARDWARE_CONFIG__TIMER3_INT_UPDATE_ENABLE__
 }
 //-----------------------------------------------------------------
 // inline void timer3_start()
@@ -56,7 +58,8 @@ inline void timer3_config_init(){
 //
 //-----------------------------------------------------------------
 inline void timer3_start(){
-    LL_TIM_ClearFlag_UPDATE(TIM3);  // 清除向上计数溢出标志位
+    if(__HARDWARE_CONFIG__TIMER3_INT_UPDATE_ENABLE__)
+      LL_TIM_ClearFlag_UPDATE(TIM3);  // 清除向上计数溢出标志位
     LL_TIM_EnableCounter   (TIM3);  // 使能定时器开始计数
 }
 //-----------------------------------------------------------------
@@ -70,7 +73,8 @@ inline void timer3_start(){
 //
 //-----------------------------------------------------------------
 inline void timer3_stop(){
-    LL_TIM_ClearFlag_UPDATE(TIM3);   // 清除向上计数溢出标志位
+    if(__HARDWARE_CONFIG__TIMER3_INT_UPDATE_ENABLE__)
+      LL_TIM_ClearFlag_UPDATE(TIM3);   // 清除向上计数溢出标志位
     LL_TIM_DisableCounter   (TIM3);  // 关闭定时器计数
 }
 
