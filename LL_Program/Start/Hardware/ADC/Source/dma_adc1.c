@@ -11,18 +11,18 @@ uint32_t dma_adc_finish_cnt = 0;
 //*******************************// define function     //************************************//
 
 //-----------------------------------------------------------------
-// void AD_TIM4_Init()
+// void AD_TIM15_Init()
 //-----------------------------------------------------------------
 //
-// 函数功能: TIM4初始化，此定时器用于采样触发(采样率1M)
+// 函数功能: TIM15初始化，此定时器用于采样触发(采样率1M)
 // 入口参数1: 无
 // 返 回 值: 无
 // 注意事项: 无
 //
 //-----------------------------------------------------------------
-void AD_TIM4_Init(){
+void AD_TIM15_Init(){
 	//? 启用TIM时钟
-	LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM4);
+	LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_TIM15);
 	
 	//? 定时器结构体配置
 	LL_TIM_InitTypeDef LL_TIM_Struct               = {0};
@@ -30,13 +30,13 @@ void AD_TIM4_Init(){
 	                   LL_TIM_Struct.Autoreload    = 9;                           //? 周期系数
 	                   LL_TIM_Struct.CounterMode   = LL_TIM_COUNTERDIRECTION_UP;  // 计数模式：向上递增
 	                   LL_TIM_Struct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;   // 时钟分频：1
-	LL_TIM_Init(TIM4, &LL_TIM_Struct);
+	LL_TIM_Init(TIM15, &LL_TIM_Struct);
 
 	//? 其他配置
-	LL_TIM_EnableARRPreload(TIM4);								// 启动自动装载模式
-	LL_TIM_SetClockSource(TIM4, LL_TIM_CLOCKSOURCE_INTERNAL);	// 内部APB1时钟240MHz
-	LL_TIM_SetTriggerOutput(TIM4, LL_TIM_TRGO_UPDATE);			// 事件更新
-	LL_TIM_DisableCounter(TIM4);								// 失能计数器
+	LL_TIM_EnableARRPreload(TIM15);								// 启动自动装载模式
+	LL_TIM_SetClockSource(TIM15, LL_TIM_CLOCKSOURCE_INTERNAL);	// 内部APB1时钟240MHz
+	LL_TIM_SetTriggerOutput(TIM15, LL_TIM_TRGO_UPDATE);			// 事件更新
+	LL_TIM_DisableCounter(TIM15);								// 失能计数器
 }
  
 //-----------------------------------------------------------------
@@ -137,7 +137,7 @@ void Samp_Adc_Init(uint32_t buff_Addr, uint32_t trans_Num){
 
 	//? 规则采样参数配置 
 	LL_ADC_REG_InitTypeDef ADC_REG_InitStruct                  = {0};
-	                       ADC_REG_InitStruct.TriggerSource    = LL_ADC_REG_TRIG_EXT_TIM4_TRGO;      //? ADC触发源：TIM4更新事件触发
+	                       ADC_REG_InitStruct.TriggerSource    = LL_ADC_REG_TRIG_EXT_TIM15_TRGO;      //? ADC触发源：TIM15更新事件触发
 	                       ADC_REG_InitStruct.DataTransferMode = LL_ADC_REG_DMA_TRANSFER_UNLIMITED;  // 数据传输模式：无限制DMA传输
 	                       ADC_REG_InitStruct.ContinuousMode   = LL_ADC_REG_CONV_SINGLE;             // ADC采样连续模式：单次非连续
 	                       ADC_REG_InitStruct.SequencerLength  = ADC_SequencerLength_Num;            //! ADC采样序列长度：扫描
@@ -185,7 +185,7 @@ void Samp_Adc_Init(uint32_t buff_Addr, uint32_t trans_Num){
 	#endif // end of __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__
 
 	//? 初始化采样定时器 
-	AD_TIM4_Init();
+	AD_TIM15_Init();
 }
  
 //-----------------------------------------------------------------
@@ -207,7 +207,7 @@ void Start_Sample()
 	LL_ADC_Enable             (ADC1);                                    // 使能ADC
 	while                     (LL_ADC_IsActiveFlag_ADRDY(ADC1) != SET);  // 等待ADC准备就绪
 	LL_ADC_REG_StartConversion(ADC1);                                    // 开启ADC转换
-	LL_TIM_EnableCounter      (TIM4);                                    // 启用定时器
+	LL_TIM_EnableCounter      (TIM15);                                    // 启用定时器
 }
 //-----------------------------------------------------------------
 // void Stop_Sample()
@@ -221,7 +221,7 @@ void Start_Sample()
 //-----------------------------------------------------------------
 void Stop_Sample()
 {
-	LL_TIM_DisableCounter     (TIM4);                                       // 关闭定时器
+	LL_TIM_DisableCounter     (TIM15);                                       // 关闭定时器
 	LL_ADC_REG_StopConversion (ADC1);                                       // 停止ADC转换
 	while(LL_ADC_REG_IsConversionOngoing(ADC1) != 0);  						// 等待转换停止
 	LL_ADC_Disable            (ADC1);                                       // 关闭ADC

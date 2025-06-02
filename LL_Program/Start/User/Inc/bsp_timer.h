@@ -9,7 +9,7 @@ extern "C"{
 #include "main.h"
 //*******************************// define statement        //************************************//
 
-#define bsp_IMx                 TIM7				//宏定义方便替换定时器
+#define bsp_IMx                 TIM14				//宏定义方便替换定时器
 #define bsp_us                  (bsp_IMx->CNT + (bspTick << 16)) 
 #define bsp_ms                  (bsp_us / 1000) 
 #define bsp_sec                 (bsp_ms / 1000) 
@@ -21,6 +21,12 @@ extern "C"{
 #define bsp_mark_dif_sec        ((bspTick_mark_2 - bspTick_mark_1) / 1000000 % 60) 
 #define bsp_mark_dif_min        ((bspTick_mark_2 - bspTick_mark_1) / 60000000 % 60) 
 #define bsp_mark_dif_hour       ((bspTick_mark_2 - bspTick_mark_1) / 3600000000 % 24) 
+
+#define bsp_mark34_dif_us       ((bspTick_mark_4 - bspTick_mark_3) % 1000) 
+#define bsp_mark34_dif_ms       ((bspTick_mark_4 - bspTick_mark_3) / 1000 % 1000) 
+#define bsp_mark34_dif_sec      ((bspTick_mark_4 - bspTick_mark_3) / 1000000 % 60) 
+#define bsp_mark34_dif_min      ((bspTick_mark_4 - bspTick_mark_3) / 60000000 % 60) 
+#define bsp_mark34_dif_hour     ((bspTick_mark_4 - bspTick_mark_3) / 3600000000 % 24) 
 
 //*******************************// extern parameters       //************************************//
 

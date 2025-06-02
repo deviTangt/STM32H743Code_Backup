@@ -7,7 +7,7 @@
 #include "dma_adc1.h"
 //*******************************// define statement        //************************************//
 
-#define TIM2CH1_CAPTURE_RECOVERY_TIME       10000
+#define TIM2CH1_CAPTURE_RECOVERY_TIME       1
 
 //*******************************// extern parameters       //************************************//
 

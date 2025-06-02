@@ -96,3 +96,33 @@ inline void TIM14_IRQHandler_Func(void){
 
 //*******************************// end_c               //************************************//
 #endif	// end of __HARDWARE_CONFIG__USER_TIMER14_ENABLE__
+
+
+#if 0 //// stm32h7xx_it.cÌæ»»
+/**
+  * @brief This function handles TIM8 trigger and commutation interrupts and TIM14 global interrupt.
+  */
+void TIM8_TRG_COM_TIM14_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM8_TRG_COM_TIM14_IRQn 0 */
+  #if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER14_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER14_ENABLE__
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    //? TIM14_IRQHandler_Func
+    //-----------------------------------------------------------------
+    //
+    // Interrupt Excute Function: Once TIM14->CNT reached the maximum counter value,
+    //                             excute certain function.
+    // Detected Case: TIM14 Up Overflow
+    // Returned Value: excute certain function
+    // Notice: None
+    //
+    //-----------------------------------------------------------------
+    TIM14_IRQHandler_Func();
+  #endif // end of __HARDWARE_CONFIG__USER_TIMER14_ENABLE__
+  /* USER CODE END TIM8_TRG_COM_TIM14_IRQn 0 */
+  /* USER CODE BEGIN TIM8_TRG_COM_TIM14_IRQn 1 */
+
+  /* USER CODE END TIM8_TRG_COM_TIM14_IRQn 1 */
+}
+#endif

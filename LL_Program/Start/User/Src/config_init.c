@@ -79,6 +79,12 @@ inline void config_user_timer_init(){
             timer3_start();
         #endif // end of __HARDWARE_CONFIG__USER_TIMER3_ENABLE__
 
+        //? User Timer 4
+        #if __HARDWARE_CONFIG__USER_TIMER4_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER4_ENABLE__
+            timer4_config_init();
+            timer4_start();
+        #endif // end of __HARDWARE_CONFIG__USER_TIMER4_ENABLE__
+
         //? User Timer 5
         #if __HARDWARE_CONFIG__USER_TIMER5_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER5_ENABLE__
             timer5_config_init();
@@ -90,6 +96,12 @@ inline void config_user_timer_init(){
             timer6_config_init();
             timer6_start();
         #endif // end of __HARDWARE_CONFIG__USER_TIMER6_ENABLE__
+
+        //? User Timer 7
+        #if __HARDWARE_CONFIG__USER_TIMER7_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER7_ENABLE__
+            timer7_config_init();
+            timer7_start();
+        #endif // end of __HARDWARE_CONFIG__USER_TIMER7_ENABLE__
 
         //? User Timer 8
         #if __HARDWARE_CONFIG__USER_TIMER8_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER8_ENABLE__

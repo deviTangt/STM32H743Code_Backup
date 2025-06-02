@@ -107,7 +107,7 @@ void MX_ADC1_Init(void)
   ADC_InitStruct.Resolution = LL_ADC_RESOLUTION_16B;
   ADC_InitStruct.LowPowerMode = LL_ADC_LP_MODE_NONE;
   LL_ADC_Init(ADC1, &ADC_InitStruct);
-  ADC_REG_InitStruct.TriggerSource = LL_ADC_REG_TRIG_EXT_TIM4_TRGO;
+  ADC_REG_InitStruct.TriggerSource = LL_ADC_REG_TRIG_EXT_TIM15_TRGO;
   ADC_REG_InitStruct.SequencerLength = LL_ADC_REG_SEQ_SCAN_ENABLE_5RANKS;
   ADC_REG_InitStruct.SequencerDiscont = DISABLE;
   ADC_REG_InitStruct.ContinuousMode = LL_ADC_REG_CONV_SINGLE;

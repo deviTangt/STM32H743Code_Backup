@@ -19,15 +19,20 @@
 void visualize_show(){
     //? 输入捕获信息
     if (TIM2CH1_CAPTURE_STA == 3){
-      printf_s(10, "timer2_call_cnt:%d", timer2_call_cnt);
-      printf_s(11, "CAP_VAl[0]:%d", TIM2CH1_CAPTURE_VAl[0]);
-      printf_s(12, "CAP_VAl[1]:%d", TIM2CH1_CAPTURE_VAl[1]);
-      printf_s(13, "CAP_VAl[2]:%d", TIM2CH1_CAPTURE_VAl[2]);
-      printf_s(14, "CAP_VAl[3]:%d", TIM2CH1_CAPTURE_VAl[3]);
-      printf_s(15, "周期:%2d.%03ds %03dus", TIM2CH1_CAPTURE_Period / 1000000, TIM2CH1_CAPTURE_Period / 1000 % 1000, TIM2CH1_CAPTURE_Period % 1000);
-      printf_s(16, "频率:%.3fHz", 1000000.0 / TIM2CH1_CAPTURE_Period);
-      printf_s(17, "正占空比:%2d.%03d%%", TIM2CH1_CAPTURE_DutyPeriod * 100 / TIM2CH1_CAPTURE_Period, TIM2CH1_CAPTURE_DutyPeriod * 100000 / TIM2CH1_CAPTURE_Period % 1000);
-      printf_s(18, "负占空比:%2d.%03d%%", (TIM2CH1_CAPTURE_Period - TIM2CH1_CAPTURE_DutyPeriod) * 100 / TIM2CH1_CAPTURE_Period, (TIM2CH1_CAPTURE_Period - TIM2CH1_CAPTURE_DutyPeriod) * 100000 / TIM2CH1_CAPTURE_Period % 1000);
+      if (TIM2CH1_CAPTURE_Period < 1000000){ // freq >= 1Hz
+        printf_s(10, "timer2_call_cnt:%d", timer2_call_cnt);
+        printf_s(11, "CAP_VAl[0]:%d", TIM2CH1_CAPTURE_VAl[0]);
+        printf_s(12, "CAP_VAl[1]:%d", TIM2CH1_CAPTURE_VAl[1]);
+        printf_s(13, "CAP_VAl[2]:%d", TIM2CH1_CAPTURE_VAl[2]);
+        printf_s(14, "CAP_VAl[3]:%d", TIM2CH1_CAPTURE_VAl[3]);
+        printf_s(15, "周期:%2d.%03ds %03dus", TIM2CH1_CAPTURE_Period / 1000000, TIM2CH1_CAPTURE_Period / 1000 % 1000, TIM2CH1_CAPTURE_Period % 1000);
+        if (1000000.0 / TIM2CH1_CAPTURE_Period > 0.02)
+          printf_s(16, "频率:%.3fHz", 1000000.0 / TIM2CH1_CAPTURE_Period);
+        if (TIM2CH1_CAPTURE_DutyPeriod * 100 / TIM2CH1_CAPTURE_Period > 0){
+          printf_s(17, "正占空比:%2d.%03d%%", TIM2CH1_CAPTURE_DutyPeriod * 100 / TIM2CH1_CAPTURE_Period, TIM2CH1_CAPTURE_DutyPeriod * 100000 / TIM2CH1_CAPTURE_Period % 1000);
+          printf_s(18, "负占空比:%2d.%03d%%", (TIM2CH1_CAPTURE_Period - TIM2CH1_CAPTURE_DutyPeriod) * 100 / TIM2CH1_CAPTURE_Period, (TIM2CH1_CAPTURE_Period - TIM2CH1_CAPTURE_DutyPeriod) * 100000 / TIM2CH1_CAPTURE_Period % 1000);
+        }
+      }
     }
 
     //? 数据接收
@@ -46,12 +51,7 @@ void visualize_show(){
         printf_s(5 + i, "AD_val %d:%dmV", i, (DMA_ADC_RX_BUF[i] * 3300) >> 16);
       }
     #endif // end of __HARDWARE_CONFIG__DMA_ADC1_ENABLE__
-
-    //printf_s(1, "timer1_call_cnt:%d", timer1_call_cnt);
-    // printf_s(1, "timer15_call_cnt:%d", timer15_call_cnt);
-    // printf_s(2, "timer16_call_cnt:%d", timer16_call_cnt);
-    // printf_s(3, "timer17_call_cnt:%d", timer17_call_cnt);
-    // printf_s(14, "timer15:%d", TIM15->CNT);
+    
 }
 
 //*******************************// end_c               //************************************//

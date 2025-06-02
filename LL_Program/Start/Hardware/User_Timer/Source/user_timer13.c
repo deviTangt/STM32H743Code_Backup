@@ -96,3 +96,49 @@ inline void TIM13_IRQHandler_Func(void){
 
 //*******************************// end_c               //************************************//
 #endif	// end of __HARDWARE_CONFIG__USER_TIMER13_ENABLE__
+
+
+#if 0 //// stm32h7xx_it.cÌæ»»
+/**
+  * @brief This function handles TIM8 update interrupt and TIM13 global interrupt.
+  */
+void TIM8_UP_TIM13_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM8_UP_TIM13_IRQn 0 */
+  #if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER8_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER8_ENABLE__
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    //? TIM8_IRQHandler_Func
+    //-----------------------------------------------------------------
+    //
+    // Interrupt Excute Function: Once TIM8->CNT reached the maximum counter value,
+    //                             excute certain function.
+    // Detected Case: TIM3 Up Overflow
+    // Returned Value: excute certain function
+    // Notice: None
+    //
+    //-----------------------------------------------------------------
+    TIM8_IRQHandler_Func();
+  #endif // end of __HARDWARE_CONFIG__USER_TIMER8_ENABLE__
+
+  #if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER13_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER13_ENABLE__
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    //? TIM13_IRQHandler_Func
+    //-----------------------------------------------------------------
+    //
+    // Interrupt Excute Function: Once TIM13->CNT reached the maximum counter value,
+    //                             excute certain function.
+    // Detected Case: TIM13 Up Overflow
+    // Returned Value: excute certain function
+    // Notice: None
+    //
+    //-----------------------------------------------------------------
+    TIM13_IRQHandler_Func();
+  #endif // end of __HARDWARE_CONFIG__USER_TIMER13_ENABLE__
+  /* USER CODE END TIM8_UP_TIM13_IRQn 0 */
+  /* USER CODE BEGIN TIM8_UP_TIM13_IRQn 1 */
+
+  /* USER CODE END TIM8_UP_TIM13_IRQn 1 */
+}
+#endif

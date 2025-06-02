@@ -16,12 +16,12 @@ uint32_t timer17_call_cnt = 0;
 // 函数功能: timer17定时器配置初始化
 // 入口参数1: 无
 // 返 回 值: 无
-// 注意事项: 无
+// 注意事项: 挂载在APB2总线上，与一般定时器不同
 //
 //-----------------------------------------------------------------
 inline void timer17_config_init(){
 	//? 初始化时钟
-	LL_APB1_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_TIM17);
+	LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_TIM17);
 
 	//? 配置中断
 	NVIC_SetPriority(TIM17_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),4, 2));
@@ -94,3 +94,34 @@ inline void TIM17_IRQHandler_Func(void){
 
 //*******************************// end_c               //************************************//
 #endif	// end of __HARDWARE_CONFIG__USER_TIMER17_ENABLE__
+
+
+#if 0 //// stm32h7xx_it.c替换
+/**
+  * @brief This function handles TIM17 global interrupt.
+  */
+void TIM17_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM17_IRQn 0 */
+  #if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER17_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER17_ENABLE__
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    //? TIM17_IRQHandler_Func
+    //-----------------------------------------------------------------
+    //
+    // Interrupt Excute Function: Once TIM17->CNT reached the maximum counter value,
+    //                             excute certain function.
+    // Detected Case: TIM17 Up Overflow
+    // Returned Value: excute certain function
+    // Notice: None
+    //
+    //-----------------------------------------------------------------
+    TIM17_IRQHandler_Func();
+  #endif // end of __HARDWARE_CONFIG__USER_TIMER17_ENABLE__
+  /* USER CODE END TIM17_IRQn 0 */
+  /* USER CODE BEGIN TIM17_IRQn 1 */
+
+  /* USER CODE END TIM17_IRQn 1 */
+}
+#endif
+

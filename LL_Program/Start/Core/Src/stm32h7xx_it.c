@@ -335,7 +335,21 @@ void TIM1_BRK_IRQHandler(void)
 void TIM1_UP_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM1_UP_IRQn 0 */
-
+  #if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER1_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER1_ENABLE__
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    //? TIM1_IRQHandler_Func
+    //-----------------------------------------------------------------
+    //
+    // Interrupt Excute Function: Once TIM1->CNT reached the maximum counter value,
+    //                             excute certain function.
+    // Detected Case: TIM3 Up Overflow
+    // Returned Value: excute certain function
+    // Notice: None
+    //
+    //-----------------------------------------------------------------
+    TIM1_IRQHandler_Func();
+  #endif // end of __HARDWARE_CONFIG__USER_TIMER1_ENABLE__
   /* USER CODE END TIM1_UP_IRQn 0 */
   /* USER CODE BEGIN TIM1_UP_IRQn 1 */
 
@@ -402,7 +416,21 @@ void TIM3_IRQHandler(void)
 void TIM4_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM4_IRQn 0 */
-
+  #if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER4_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER4_ENABLE__
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    //? TIM4_IRQHandler_Func
+    //-----------------------------------------------------------------
+    //
+    // Interrupt Excute Function: Once TIM4->CNT reached the maximum counter value,
+    //                             excute certain function.
+    // Detected Case: TIM4 Up Overflow
+    // Returned Value: excute certain function
+    // Notice: None
+    //
+    //-----------------------------------------------------------------
+    TIM4_IRQHandler_Func();
+  #endif // end of __HARDWARE_CONFIG__USER_TIMER4_ENABLE__
   /* USER CODE END TIM4_IRQn 0 */
   /* USER CODE BEGIN TIM4_IRQn 1 */
 
@@ -457,6 +485,22 @@ void TIM8_UP_TIM13_IRQHandler(void)
     //-----------------------------------------------------------------
     TIM13_IRQHandler_Func();
   #endif // end of __HARDWARE_CONFIG__USER_TIMER13_ENABLE__
+
+  #if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER8_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER8_ENABLE__
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    //? TIM8_IRQHandler_Func
+    //-----------------------------------------------------------------
+    //
+    // Interrupt Excute Function: Once TIM8->CNT reached the maximum counter value,
+    //                             excute certain function.
+    // Detected Case: TIM3 Up Overflow
+    // Returned Value: excute certain function
+    // Notice: None
+    //
+    //-----------------------------------------------------------------
+    TIM8_IRQHandler_Func();
+  #endif // end of __HARDWARE_CONFIG__USER_TIMER8_ENABLE__
   /* USER CODE END TIM8_UP_TIM13_IRQn 0 */
   /* USER CODE BEGIN TIM8_UP_TIM13_IRQn 1 */
 
@@ -469,21 +513,21 @@ void TIM8_UP_TIM13_IRQHandler(void)
 void TIM8_TRG_COM_TIM14_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM8_TRG_COM_TIM14_IRQn 0 */
-  #if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER14_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER14_ENABLE__
+  #if __HARDWARE_CONFIG__BSP_TIMER_ENABLE__ // begin of __HARDWARE_CONFIG__BSP_TIMER_ENABLE__
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    //? TIM14_IRQHandler_Func
+    //? TIM14_IRQHandler_BSP_Timer_UPDATE
     //-----------------------------------------------------------------
     //
-    // Interrupt Excute Function: Once TIM14->CNT reached the maximum counter value,
-    //                             excute certain function.
-    // Detected Case: TIM14 Up Overflow
-    // Returned Value: excute certain function
+    // Interrupt Excute Function: Once TIM7->CNT reached the maximum counter value 0xffff,
+    //                             update the BspTimerCnt.
+    // Detected Case: TIM7 Up Overflow
+    // Returned Value: update BspTimerCnt
     // Notice: None
     //
     //-----------------------------------------------------------------
-    TIM14_IRQHandler_Func();
-  #endif // end of __HARDWARE_CONFIG__USER_TIMER14_ENABLE__
+    Update_SystemTick();
+  #endif // end of __HARDWARE_CONFIG__BSP_TIMER_ENABLE__
   /* USER CODE END TIM8_TRG_COM_TIM14_IRQn 0 */
   /* USER CODE BEGIN TIM8_TRG_COM_TIM14_IRQn 1 */
 
@@ -550,21 +594,21 @@ void TIM6_DAC_IRQHandler(void)
 void TIM7_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM7_IRQn 0 */
-  #if __HARDWARE_CONFIG__BSP_TIMER_ENABLE__ // begin of __HARDWARE_CONFIG__BSP_TIMER_ENABLE__
+  #if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER7_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER7_ENABLE__
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    //? TIM7_IRQHandler_BSP_Timer_UPDATE
+    //? TIM7_IRQHandler_Func
     //-----------------------------------------------------------------
     //
-    // Interrupt Excute Function: Once TIM7->CNT reached the maximum counter value 0xffff,
-    //                             update the BspTimerCnt.
+    // Interrupt Excute Function: Once TIM7->CNT reached the maximum counter value,
+    //                             excute certain function.
     // Detected Case: TIM7 Up Overflow
-    // Returned Value: update BspTimerCnt
+    // Returned Value: excute certain function
     // Notice: None
     //
     //-----------------------------------------------------------------
-    Update_SystemTick();
-  #endif // end of __HARDWARE_CONFIG__BSP_TIMER_ENABLE__
+    TIM7_IRQHandler_Func();
+  #endif // end of __HARDWARE_CONFIG__USER_TIMER7_ENABLE__
   /* USER CODE END TIM7_IRQn 0 */
   /* USER CODE BEGIN TIM7_IRQn 1 */
 

@@ -16,12 +16,12 @@ uint32_t timer15_call_cnt = 0;
 // 函数功能: timer15定时器配置初始化
 // 入口参数1: 无
 // 返 回 值: 无
-// 注意事项: 无
+// 注意事项: 挂载在APB2总线上，与一般定时器不同
 //
 //-----------------------------------------------------------------
 inline void timer15_config_init(){
 	//? 初始化时钟
-	LL_APB1_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_TIM15);
+	LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_TIM15);
 
 	//? 配置中断
 	NVIC_SetPriority(TIM15_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),4, 2));
@@ -96,3 +96,33 @@ inline void TIM15_IRQHandler_Func(void){
 
 //*******************************// end_c               //************************************//
 #endif	// end of __HARDWARE_CONFIG__USER_TIMER15_ENABLE__
+
+
+#if 0 //// stm32h7xx_it.c替换
+/**
+  * @brief This function handles TIM15 global interrupt.
+  */
+void TIM15_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM15_IRQn 0 */
+  #if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER15_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER15_ENABLE__
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    //? TIM15_IRQHandler_Func
+    //-----------------------------------------------------------------
+    //
+    // Interrupt Excute Function: Once TIM15->CNT reached the maximum counter value,
+    //                             excute certain function.
+    // Detected Case: TIM15 Up Overflow
+    // Returned Value: excute certain function
+    // Notice: None
+    //
+    //-----------------------------------------------------------------
+    TIM15_IRQHandler_Func();
+  #endif // end of __HARDWARE_CONFIG__USER_TIMER15_ENABLE__
+  /* USER CODE END TIM15_IRQn 0 */
+  /* USER CODE BEGIN TIM15_IRQn 1 */
+
+  /* USER CODE END TIM15_IRQn 1 */
+}
+#endif

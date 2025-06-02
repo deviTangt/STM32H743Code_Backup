@@ -1,7 +1,7 @@
 #include "__HARDWARE_CONFIG__.h"
 #if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER6_ENABLE__	// begin of __HARDWARE_CONFIG__USER_TIMER6_ENABLE__
 //*******************************// include _h files    //************************************//
-#include "user_timer6.h"
+#include "user_timer06.h"
 //*******************************// define parameters   //************************************//
 //*******************************// parameters          //************************************//
 
@@ -96,3 +96,34 @@ inline void TIM6_IRQHandler_Func(void){
 
 //*******************************// end_c               //************************************//
 #endif	// end of __HARDWARE_CONFIG__USER_TIMER6_ENABLE__
+
+
+
+#if 0 //// stm32h7xx_it.cÌæ»»
+/**
+  * @brief This function handles TIM6 global interrupt, DAC1_CH1 and DAC1_CH2 underrun error interrupts.
+  */
+void TIM6_DAC_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM6_DAC_IRQn 0 */
+  #if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER6_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER6_ENABLE__
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    //? TIM6_IRQHandler_Func
+    //-----------------------------------------------------------------
+    //
+    // Interrupt Excute Function: Once TIM6->CNT reached the maximum counter value,
+    //                             excute certain function.
+    // Detected Case: TIM6 Up Overflow
+    // Returned Value: excute certain function
+    // Notice: None
+    //
+    //-----------------------------------------------------------------
+    TIM6_IRQHandler_Func();
+  #endif // end of __HARDWARE_CONFIG__USER_TIMER6_ENABLE__
+  /* USER CODE END TIM6_DAC_IRQn 0 */
+  /* USER CODE BEGIN TIM6_DAC_IRQn 1 */
+
+  /* USER CODE END TIM6_DAC_IRQn 1 */
+}
+#endif

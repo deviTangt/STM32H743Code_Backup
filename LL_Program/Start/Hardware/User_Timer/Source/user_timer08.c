@@ -1,7 +1,7 @@
 #include "__HARDWARE_CONFIG__.h"
 #if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER8_ENABLE__	// begin of __HARDWARE_CONFIG__USER_TIMER8_ENABLE__
 //*******************************// include _h files    //************************************//
-#include "user_timer8.h"
+#include "user_timer08.h"
 //*******************************// define parameters   //************************************//
 //*******************************// parameters          //************************************//
 
@@ -16,12 +16,12 @@ uint32_t timer8_call_cnt = 0;
 // 函数功能: timer8定时器配置初始化
 // 入口参数1: 无
 // 返 回 值: 无
-// 注意事项: 无
+// 注意事项: 挂载在APB2总线上，与一般定时器不同
 //
 //-----------------------------------------------------------------
 inline void timer8_config_init(){
 	//? 初始化时钟
-	LL_APB1_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_TIM8);
+	LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_TIM8);
 
 	//? 配置中断
 	NVIC_SetPriority(TIM8_UP_TIM13_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),4, 2));
@@ -96,3 +96,50 @@ inline void TIM8_IRQHandler_Func(void){
 
 //*******************************// end_c               //************************************//
 #endif	// end of __HARDWARE_CONFIG__USER_TIMER8_ENABLE__
+
+
+
+#if 0 //// stm32h7xx_it.c替换
+/**
+  * @brief This function handles TIM8 update interrupt and TIM13 global interrupt.
+  */
+void TIM8_UP_TIM13_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM8_UP_TIM13_IRQn 0 */
+  #if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER8_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER8_ENABLE__
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    //? TIM8_IRQHandler_Func
+    //-----------------------------------------------------------------
+    //
+    // Interrupt Excute Function: Once TIM8->CNT reached the maximum counter value,
+    //                             excute certain function.
+    // Detected Case: TIM3 Up Overflow
+    // Returned Value: excute certain function
+    // Notice: None
+    //
+    //-----------------------------------------------------------------
+    TIM8_IRQHandler_Func();
+  #endif // end of __HARDWARE_CONFIG__USER_TIMER8_ENABLE__
+
+  #if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER13_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER13_ENABLE__
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    //? TIM13_IRQHandler_Func
+    //-----------------------------------------------------------------
+    //
+    // Interrupt Excute Function: Once TIM13->CNT reached the maximum counter value,
+    //                             excute certain function.
+    // Detected Case: TIM13 Up Overflow
+    // Returned Value: excute certain function
+    // Notice: None
+    //
+    //-----------------------------------------------------------------
+    TIM13_IRQHandler_Func();
+  #endif // end of __HARDWARE_CONFIG__USER_TIMER13_ENABLE__
+  /* USER CODE END TIM8_UP_TIM13_IRQn 0 */
+  /* USER CODE BEGIN TIM8_UP_TIM13_IRQn 1 */
+
+  /* USER CODE END TIM8_UP_TIM13_IRQn 1 */
+}
+#endif

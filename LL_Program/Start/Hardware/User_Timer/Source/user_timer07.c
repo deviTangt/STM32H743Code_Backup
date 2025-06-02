@@ -1,31 +1,31 @@
 #include "__HARDWARE_CONFIG__.h"
-#if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER16_ENABLE__	// begin of __HARDWARE_CONFIG__USER_TIMER16_ENABLE__
+#if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER7_ENABLE__	// begin of __HARDWARE_CONFIG__USER_TIMER7_ENABLE__
 //*******************************// include _h files    //************************************//
-#include "user_timer16.h"
+#include "user_timer07.h"
 //*******************************// define parameters   //************************************//
 //*******************************// parameters          //************************************//
 
-uint32_t timer16_call_cnt = 0;
+uint32_t timer7_call_cnt = 0;
 
 //*******************************// define function     //************************************//
 
 //-----------------------------------------------------------------
-// inline void timer16_config_init()
+// inline void timer7_config_init()
 //-----------------------------------------------------------------
 //
-// 函数功能: timer16定时器配置初始化
+// 函数功能: timer7定时器配置初始化
 // 入口参数1: 无
 // 返 回 值: 无
-// 注意事项: 挂载在APB2总线上，与一般定时器不同
+// 注意事项: 无
 //
 //-----------------------------------------------------------------
-inline void timer16_config_init(){
+inline void timer7_config_init(){
 	//? 初始化时钟
-	LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_TIM16);
+	LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM7);
 
 	//? 配置中断
-	NVIC_SetPriority(TIM16_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),4, 2));
-    NVIC_EnableIRQ(TIM16_IRQn);
+	NVIC_SetPriority(TIM7_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),4, 2));
+    NVIC_EnableIRQ(TIM7_IRQn);
 
 	//? 配置定时器结构体 1000us
 	LL_TIM_InitTypeDef TIM_InitStruct               = {0};
@@ -33,20 +33,20 @@ inline void timer16_config_init(){
 	                   TIM_InitStruct.CounterMode   = LL_TIM_COUNTERMODE_UP;      // 预分频
 	                   TIM_InitStruct.Autoreload    = 1000 - 1;                    // 计数模式：向上计数
 	                   TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;  // 自动重装载值
-	LL_TIM_Init(TIM16, &TIM_InitStruct);
+	LL_TIM_Init(TIM7, &TIM_InitStruct);
 
 	//? 其他配置
-	LL_TIM_DisableARRPreload(TIM16);                                // 启动自动装载模式
-	LL_TIM_SetClockSource    (TIM16, LL_TIM_CLOCKSOURCE_INTERNAL);  // 设置时钟源：内部晶振
-	LL_TIM_SetTriggerOutput  (TIM16, LL_TIM_TRGO_RESET);            // 复位更新
-	LL_TIM_DisableMasterSlaveMode(TIM16);
+	LL_TIM_DisableARRPreload(TIM7);                                // 启动自动装载模式
+	LL_TIM_SetClockSource    (TIM7, LL_TIM_CLOCKSOURCE_INTERNAL);  // 设置时钟源：内部晶振
+	LL_TIM_SetTriggerOutput  (TIM7, LL_TIM_TRGO_RESET);            // 复位更新
+	LL_TIM_DisableMasterSlaveMode(TIM7);
 
     //? 标志位
-	LL_TIM_ClearFlag_UPDATE(TIM16);  // 清除向上计数溢出标志位
-    LL_TIM_EnableIT_UPDATE (TIM16);  // 使能定时器向上计数中断
+	LL_TIM_ClearFlag_UPDATE(TIM7);  // 清除向上计数溢出标志位
+  LL_TIM_EnableIT_UPDATE (TIM7);  // 使能定时器向上计数中断
 }
 //-----------------------------------------------------------------
-// inline void timer16_start()
+// inline void timer7_start()
 //-----------------------------------------------------------------
 //
 // 函数功能: 开启定时器3
@@ -55,12 +55,12 @@ inline void timer16_config_init(){
 // 注意事项: 无
 //
 //-----------------------------------------------------------------
-inline void timer16_start(){
-    LL_TIM_ClearFlag_UPDATE(TIM16);  // 清除向上计数溢出标志位
-    LL_TIM_EnableCounter   (TIM16);  // 使能定时器开始计数
+inline void timer7_start(){
+    LL_TIM_ClearFlag_UPDATE(TIM7);  // 清除向上计数溢出标志位
+    LL_TIM_EnableCounter   (TIM7);  // 使能定时器开始计数
 }
 //-----------------------------------------------------------------
-// inline void timer16_stop()
+// inline void timer7_stop()
 //-----------------------------------------------------------------
 //
 // 函数功能: 关闭定时器3
@@ -69,61 +69,60 @@ inline void timer16_start(){
 // 注意事项: 无
 //
 //-----------------------------------------------------------------
-inline void timer16_stop(){
-    LL_TIM_ClearFlag_UPDATE(TIM16);   // 清除向上计数溢出标志位
-    LL_TIM_DisableCounter   (TIM16);  // 关闭定时器计数
+inline void timer7_stop(){
+    LL_TIM_ClearFlag_UPDATE(TIM7);   // 清除向上计数溢出标志位
+    LL_TIM_DisableCounter   (TIM7);  // 关闭定时器计数
 }
 
 //-----------------------------------------------------------------
-// inline void TIM16_IRQHandler_Func(void)
+// inline void TIM7_IRQHandler_Func(void)
 //-----------------------------------------------------------------
 //
 // 函数功能: 定时器3中断服务函数
 // 入口参数1: 无
 // 返 回 值: 无
-// 注意事项: 将此函数加入定时器中断服务函数TIM16_IRQHandler(void)中
+// 注意事项: 将此函数加入定时器中断服务函数TIM7_IRQHandler(void)中
 //
 //-----------------------------------------------------------------
-inline void TIM16_IRQHandler_Func(void){
-	if(LL_TIM_IsActiveFlag_UPDATE(TIM16) == SET){	//判断定时器是否溢出
-		LL_TIM_ClearFlag_UPDATE(TIM16);				//清除向上计数溢出标志位
+inline void TIM7_IRQHandler_Func(void){
+	if(LL_TIM_IsActiveFlag_UPDATE(TIM7) == SET){	//判断定时器是否溢出
+		LL_TIM_ClearFlag_UPDATE(TIM7);				//清除向上计数溢出标志位
 		
-		timer16_call_cnt ++;
+		timer7_call_cnt ++;
 	}
 }
 
 
 
 //*******************************// end_c               //************************************//
-#endif	// end of __HARDWARE_CONFIG__USER_TIMER16_ENABLE__
+#endif	// end of __HARDWARE_CONFIG__USER_TIMER7_ENABLE__
 
 
 #if 0 //// stm32h7xx_it.c替换
 /**
-  * @brief This function handles TIM16 global interrupt.
+  * @brief This function handles TIM7 global interrupt.
   */
-void TIM16_IRQHandler(void)
+void TIM7_IRQHandler(void)
 {
-  /* USER CODE BEGIN TIM16_IRQn 0 */
-  #if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER16_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER16_ENABLE__
+  /* USER CODE BEGIN TIM7_IRQn 0 */
+  #if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER7_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER7_ENABLE__
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    //? TIM16_IRQHandler_Func
+    //? TIM7_IRQHandler_Func
     //-----------------------------------------------------------------
     //
-    // Interrupt Excute Function: Once TIM16->CNT reached the maximum counter value,
+    // Interrupt Excute Function: Once TIM7->CNT reached the maximum counter value,
     //                             excute certain function.
-    // Detected Case: TIM16 Up Overflow
+    // Detected Case: TIM7 Up Overflow
     // Returned Value: excute certain function
     // Notice: None
     //
     //-----------------------------------------------------------------
-    TIM16_IRQHandler_Func();
-  #endif // end of __HARDWARE_CONFIG__USER_TIMER16_ENABLE__
-  /* USER CODE END TIM16_IRQn 0 */
-  /* USER CODE BEGIN TIM16_IRQn 1 */
+    TIM7_IRQHandler_Func();
+  #endif // end of __HARDWARE_CONFIG__USER_TIMER7_ENABLE__
+  /* USER CODE END TIM7_IRQn 0 */
+  /* USER CODE BEGIN TIM7_IRQn 1 */
 
-  /* USER CODE END TIM16_IRQn 1 */
+  /* USER CODE END TIM7_IRQn 1 */
 }
 #endif
-

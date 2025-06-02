@@ -38,7 +38,7 @@ extern uint32_t dma_adc_finish_cnt;
 //*******************************// define parameters       //************************************//
 //*******************************// extern function         //************************************//
 
-void AD_TIM4_Init();
+void AD_TIM15_Init();
 void Samp_Adc_Init(uint32_t buff_Addr, uint32_t trans_Num);
 void Start_Sample(void);
 void Stop_Sample(void);

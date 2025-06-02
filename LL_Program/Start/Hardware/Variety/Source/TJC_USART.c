@@ -162,6 +162,7 @@ inline void TJC_Usart_init(){
 	#endif // end of __HARDWARE_CONFIG__TJC_PAGE_CLEAR_ENABLE__
 
     printf_s(21, "It's MyGo!!!!!");
+	printf_s(21, "It's MyGo!!!!!");
 }
 //-----------------------------------------------------------------
 // inline void TJC_PagaInit()
@@ -169,25 +170,28 @@ inline void TJC_Usart_init(){
 //
 // 函数功能: 初始化TJC USART HMI界面
 // 入口参数1: 无
-// 注意事项: 无
+// 注意事项: 信息刷两遍以防疏漏
 //
 //-----------------------------------------------------------------
 inline void TJC_PagaInit(){
 	//? Page main
-    if (__HARDWARE_CONFIG__TJC_PAGE_JUMP_ENABLE__) 
-		printf_s_c("page main");
-    printf_s_c("click b2,0");
-    printf_s_c("click b4,0");
+    if (__HARDWARE_CONFIG__TJC_PAGE_JUMP_ENABLE__) {
+		printf_s_c("page main"); printf_s_c("page main");
+	}
+    printf_s_c("click b2,0"); printf_s_c("click b2,0");
+    printf_s_c("click b4,0"); printf_s_c("click b4,0");
 
 	//? Paga bonus_wave
-	if (__HARDWARE_CONFIG__TJC_PAGE_JUMP_ENABLE__)
-		printf_s_c("page bonus_wave");
-    printf_s_c("cle bonus_wave.s0.id,0");
+	if (__HARDWARE_CONFIG__TJC_PAGE_JUMP_ENABLE__) {
+		printf_s_c("page bonus_wave"); printf_s_c("page bonus_wave");
+	}
+    printf_s_c("cle bonus_wave.s0.id,0"); printf_s_c("cle bonus_wave.s0.id,0");
 	
 	//? Page show
-    if (__HARDWARE_CONFIG__TJC_PAGE_JUMP_ENABLE__)
-		printf_s_c("page show");
-    printf_s_c("click b6,0");
+    if (__HARDWARE_CONFIG__TJC_PAGE_JUMP_ENABLE__) {
+		printf_s_c("page show"); printf_s_c("page show");
+	}
+    printf_s_c("click b6,0"); printf_s_c("click b6,0");
 }
 
 //-----------------------------------------------------------------

@@ -25,7 +25,7 @@
 
 #define __HARDWARE_CONFIG__GPU_TEMP_ADC_ENABLE__        0       // 启用gpu_temp_adc.h
 
-#define __HARDWARE_CONFIG__DMA_ADC1_ENABLE__             1       // 启用dma_adc1.h
+#define __HARDWARE_CONFIG__DMA_ADC1_ENABLE__            0       // 启用dma_adc1.h
     #define __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__      1       // 启用dma传输ADC1采样
 
 #define __HARDWARE_CONFIG__AD9959_ENABLE__              0       // 启用ad9959.h    
@@ -34,15 +34,15 @@
     #define __HARDWARE_CONFIG__USER_TIMER1_ENABLE__          0       // 启用timer1.h    //// 高级控制定时器Timer1(16位) 
     #define __HARDWARE_CONFIG__USER_TIMER2_ENABLE__          1       // 启用timer2.h    //? 通用定时器Timer2(32位) 
     #define __HARDWARE_CONFIG__USER_TIMER3_ENABLE__          1       // 启用timer3.h    //? 通用定时器Timer3(16位)
-    //define __HARDWARE_CONFIG__USER_TIMER4_ENABLE__         0       // 启用timer4.h    // 通用定时器Timer4(16位)  //? dma_adc1占用
+    #define __HARDWARE_CONFIG__USER_TIMER4_ENABLE__          0       // 启用timer4.h    //? 通用定时器Timer4(16位)
     #define __HARDWARE_CONFIG__USER_TIMER5_ENABLE__          0       // 启用timer5.h    //? 通用定时器Timer5(32位)
     #define __HARDWARE_CONFIG__USER_TIMER6_ENABLE__          0       // 启用timer6.h    //? 基本定时器Timer6(16位)
-    //define __HARDWARE_CONFIG__USER_TIMER7_ENABLE__         0       // 启用timer7.h    // 基本定时器Timer7(16位)  //? bsp_timer占用
+    #define __HARDWARE_CONFIG__USER_TIMER7_ENABLE__          0       // 启用timer7.h    //? 基本定时器Timer7(16位)  
     #define __HARDWARE_CONFIG__USER_TIMER8_ENABLE__          0       // 启用timer8.h    //// 高级控制定时器Timer8(16位)
     #define __HARDWARE_CONFIG__USER_TIMER12_ENABLE__         0       // 启用timer12.h   //? 基本定时器Timer12(16位)
     #define __HARDWARE_CONFIG__USER_TIMER13_ENABLE__         0       // 启用timer13.h   //? 基本定时器Timer13(16位)
-    #define __HARDWARE_CONFIG__USER_TIMER14_ENABLE__         0       // 启用timer14.h   //? 基本定时器Timer14(16位)
-    #define __HARDWARE_CONFIG__USER_TIMER15_ENABLE__         0       // 启用timer15.h   //? 基本定时器Timer15(16位)
+    //define __HARDWARE_CONFIG__USER_TIMER14_ENABLE__        0       // 启用timer14.h   //! 基本定时器Timer14(16位) //! bsp_timer占用
+    //define __HARDWARE_CONFIG__USER_TIMER15_ENABLE__        0       // 启用timer15.h   //! 基本定时器Timer15(16位) //! dma_adc1占用
     #define __HARDWARE_CONFIG__USER_TIMER16_ENABLE__         0       // 启用timer16.h   //? 基本定时器Timer16(16位)
     #define __HARDWARE_CONFIG__USER_TIMER17_ENABLE__         0       // 启用timer17.h   //? 基本定时器Timer17(16位)
 

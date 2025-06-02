@@ -1,7 +1,7 @@
 #include "__HARDWARE_CONFIG__.h"
 #if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER2_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER2_ENABLE__
 //*******************************// include _h files    //************************************//
-#include "user_timer2.h"
+#include "user_timer02.h"
 //*******************************// define parameters   //************************************//
 //*******************************// parameters          //************************************//
 
@@ -154,3 +154,34 @@ inline void TIM2_IRQHandler_Func(void){
 
 //*******************************// end_c               //************************************//
 #endif	// end of __HARDWARE_CONFIG__USER_TIMER2_ENABLE__
+
+
+
+#if 0 //// stm32h7xx_it.cÌæ»»
+/**
+  * @brief This function handles TIM2 global interrupt.
+  */
+void TIM2_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM2_IRQn 0 */
+  #if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER2_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER2_ENABLE__
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    //? TIM2_IRQHandler_Func
+    //-----------------------------------------------------------------
+    //
+    // Interrupt Excute Function: Once TIM2->CNT reached the maximum counter value,
+    //                             excute certain function.
+    // Detected Case: TIM3 Up Overflow
+    // Returned Value: excute certain function
+    // Notice: None
+    //
+    //-----------------------------------------------------------------
+    TIM2_IRQHandler_Func();
+  #endif // end of __HARDWARE_CONFIG__USER_TIMER2_ENABLE__
+  /* USER CODE END TIM2_IRQn 0 */
+  /* USER CODE BEGIN TIM2_IRQn 1 */
+
+  /* USER CODE END TIM2_IRQn 1 */
+}
+#endif

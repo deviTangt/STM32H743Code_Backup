@@ -153,22 +153,28 @@
             "name": "User_Timer",
             "files": [
               {
-                "path": "../Hardware/User_Timer/Source/user_timer2.c"
+                "path": "../Hardware/User_Timer/Source/user_timer01.c"
               },
               {
-                "path": "../Hardware/User_Timer/Source/user_timer3.c"
+                "path": "../Hardware/User_Timer/Source/user_timer02.c"
               },
               {
-                "path": "../Hardware/User_Timer/Source/user_timer1.c"
+                "path": "../Hardware/User_Timer/Source/user_timer03.c"
               },
               {
-                "path": "../Hardware/User_Timer/Source/user_timer6.c"
+                "path": "../Hardware/User_Timer/Source/user_timer04.c"
               },
               {
-                "path": "../Hardware/User_Timer/Source/user_timer8.c"
+                "path": "../Hardware/User_Timer/Source/user_timer05.c"
               },
               {
-                "path": "../Hardware/User_Timer/Source/user_timer5.c"
+                "path": "../Hardware/User_Timer/Source/user_timer06.c"
+              },
+              {
+                "path": "../Hardware/User_Timer/Source/user_timer07.c"
+              },
+              {
+                "path": "../Hardware/User_Timer/Source/user_timer08.c"
               },
               {
                 "path": "../Hardware/User_Timer/Source/user_timer12.c"

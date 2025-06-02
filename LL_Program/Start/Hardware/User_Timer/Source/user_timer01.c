@@ -1,7 +1,7 @@
 #include "__HARDWARE_CONFIG__.h"
 #if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER1_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER1_ENABLE__
 //*******************************// include _h files    //************************************//
-#include "user_timer1.h"
+#include "user_timer01.h"
 //*******************************// define parameters   //************************************//
 //*******************************// parameters          //************************************//
 
@@ -16,12 +16,12 @@ uint32_t timer1_call_cnt = 0;
 // 函数功能: timer1定时器配置初始化
 // 入口参数1: 无
 // 返 回 值: 无
-// 注意事项: 无
+// 注意事项: 挂载在APB2总线上，与一般定时器不同
 //
 //-----------------------------------------------------------------
 inline void timer1_config_init(){ // 输入捕获
 	//? 初始化时钟
-	LL_APB1_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_TIM1);
+	LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_TIM1);
 
 	//? 配置中断
 	NVIC_SetPriority(TIM1_UP_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),4, 2));
@@ -79,7 +79,7 @@ inline void timer1_stop(){
 // inline void TIM1_IRQHandler_Func(void)
 //-----------------------------------------------------------------
 //
-// 函数功能: 定时器3中断服务函数
+// 函数功能: 定时器1中断服务函数
 // 入口参数1: 无
 // 返 回 值: 无
 // 注意事项: 将此函数加入定时器中断服务函数TIM1_IRQHandler(void)中
@@ -87,7 +87,7 @@ inline void timer1_stop(){
 //-----------------------------------------------------------------
 inline void TIM1_IRQHandler_Func(void){
 	if(LL_TIM_IsActiveFlag_UPDATE(TIM1) == SET){	//判断定时器是否溢出
-		//LL_TIM_ClearFlag_UPDATE(TIM1);				//清除向上计数溢出标志位
+		LL_TIM_ClearFlag_UPDATE(TIM1);				//清除向上计数溢出标志位
 		
         timer1_call_cnt ++;
 	}
@@ -95,3 +95,33 @@ inline void TIM1_IRQHandler_Func(void){
 
 //*******************************// end_c               //************************************//
 #endif	// end of __HARDWARE_CONFIG__USER_TIMER1_ENABLE__
+
+
+#if 0 //// stm32h7xx_it.c替换
+/**
+  * @brief This function handles TIM1 update interrupt.
+  */
+void TIM1_UP_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM1_UP_IRQn 0 */
+  #if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER1_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER1_ENABLE__
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    //? TIM1_IRQHandler_Func
+    //-----------------------------------------------------------------
+    //
+    // Interrupt Excute Function: Once TIM1->CNT reached the maximum counter value,
+    //                             excute certain function.
+    // Detected Case: TIM3 Up Overflow
+    // Returned Value: excute certain function
+    // Notice: None
+    //
+    //-----------------------------------------------------------------
+    TIM1_IRQHandler_Func();
+  #endif // end of __HARDWARE_CONFIG__USER_TIMER1_ENABLE__
+  /* USER CODE END TIM1_UP_IRQn 0 */
+  /* USER CODE BEGIN TIM1_UP_IRQn 1 */
+
+  /* USER CODE END TIM1_UP_IRQn 1 */
+}
+#endif

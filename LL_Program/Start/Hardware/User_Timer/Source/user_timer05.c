@@ -1,7 +1,7 @@
 #include "__HARDWARE_CONFIG__.h"
 #if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER5_ENABLE__	// begin of __HARDWARE_CONFIG__USER_TIMER5_ENABLE__
 //*******************************// include _h files    //************************************//
-#include "user_timer5.h"
+#include "user_timer05.h"
 //*******************************// define parameters   //************************************//
 //*******************************// parameters          //************************************//
 
@@ -43,7 +43,7 @@ inline void timer5_config_init(){
 
     //? 标志位
 	LL_TIM_ClearFlag_UPDATE(TIM5);  // 清除向上计数溢出标志位
-    LL_TIM_EnableIT_UPDATE (TIM5);  // 使能定时器向上计数中断
+  LL_TIM_EnableIT_UPDATE (TIM5);  // 使能定时器向上计数中断
 }
 //-----------------------------------------------------------------
 // inline void timer5_start()
@@ -96,3 +96,33 @@ inline void TIM5_IRQHandler_Func(void){
 
 //*******************************// end_c               //************************************//
 #endif	// end of __HARDWARE_CONFIG__USER_TIMER5_ENABLE__
+
+
+#if 0 //// stm32h7xx_it.c替换
+/**
+  * @brief This function handles TIM5 global interrupt.
+  */
+void TIM5_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM5_IRQn 0 */
+  #if __HARDWARE_CONFIG__USER_TIMER_ENABLE__ & __HARDWARE_CONFIG__USER_TIMER5_ENABLE__ // begin of __HARDWARE_CONFIG__USER_TIMER5_ENABLE__
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    //? TIM5_IRQHandler_Func
+    //-----------------------------------------------------------------
+    //
+    // Interrupt Excute Function: Once TIM5->CNT reached the maximum counter value,
+    //                             excute certain function.
+    // Detected Case: TIM5 Up Overflow
+    // Returned Value: excute certain function
+    // Notice: None
+    //
+    //-----------------------------------------------------------------
+    TIM5_IRQHandler_Func();
+  #endif // end of __HARDWARE_CONFIG__USER_TIMER5_ENABLE__
+  /* USER CODE END TIM5_IRQn 0 */
+  /* USER CODE BEGIN TIM5_IRQn 1 */
+
+  /* USER CODE END TIM5_IRQn 1 */
+}
+#endif

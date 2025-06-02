@@ -29,23 +29,23 @@ uint32_t bspTick_mark_4;
 //-----------------------------------------------------------------
 inline void bsp_Timer_Config_Init(void){
 	//? 初始化时钟
-	LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM7);
+	LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM14);
 
 	//? 配置中断
-	NVIC_SetPriority(TIM7_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),10, 0));
-	NVIC_EnableIRQ(TIM7_IRQn);
+	NVIC_SetPriority(TIM8_TRG_COM_TIM14_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),10, 0));
+	NVIC_EnableIRQ(TIM8_TRG_COM_TIM14_IRQn);
 
 	//? 配置定时器结构体 1
 	LL_TIM_InitTypeDef TIM_InitStruct             = {0};
 	                   TIM_InitStruct.Prescaler   = 239;                    // 预分频
 	                   TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;  // 计数模式：向上计数
 	                   TIM_InitStruct.Autoreload  = 65535;                  // 自动重装载值
-	LL_TIM_Init(TIM7, &TIM_InitStruct);
+	LL_TIM_Init(TIM14, &TIM_InitStruct);
 
 	//? 其他配置
-	LL_TIM_DisableARRPreload(TIM7);                     // 启动自动装载模式
-	LL_TIM_SetTriggerOutput (TIM7, LL_TIM_TRGO_RESET);  // 复位更新
-	LL_TIM_DisableMasterSlaveMode(TIM7);
+	LL_TIM_DisableARRPreload(TIM14);                     // 启动自动装载模式
+	LL_TIM_SetTriggerOutput (TIM14, LL_TIM_TRGO_RESET);  // 复位更新
+	LL_TIM_DisableMasterSlaveMode(TIM14);
 
 	//? 初始化板级支持包定时器
 	#if __HARDWARE_CONFIG__BSP_TIMER_ENABLE__ // begin of __HARDWARE_CONFIG__BSP_TIMER_ENABLE__
@@ -88,7 +88,7 @@ inline uint32_t Get_SystemTimer(void){
 // 函数功能: 更新定时器时间
 // 入口参数1: 无
 // 返 回 值: 无
-// 注意事项: 将此函数加入定时器中断服务函数TIM7_IRQHandler(void)中
+// 注意事项: 将此函数加入定时器中断服务函数TIM14_IRQHandler(void)中
 //
 //-----------------------------------------------------------------
 inline void Update_SystemTick(void)
@@ -229,7 +229,7 @@ inline void bspTick_mark_4_set(){
 //
 //-----------------------------------------------------------------
 inline void bspTick_mark34_dif_show(uint8_t SHOW_Windows){
-	printf_s(SHOW_Windows, "Tick34 Dif:%2d.%03ds %03dus", bsp_mark_dif_sec, bsp_mark_dif_ms, bsp_mark_dif_us);
+	printf_s(SHOW_Windows, "Tick34 Dif:%2d.%03ds %03dus", bsp_mark34_dif_sec, bsp_mark34_dif_ms, bsp_mark34_dif_us);
 }
 //-----------------------------------------------------------------
 // inline void bspTick_mark34_dif_show_s(uint8_t SHOW_Windows, char *string)
@@ -243,8 +243,39 @@ inline void bspTick_mark34_dif_show(uint8_t SHOW_Windows){
 //
 //-----------------------------------------------------------------
 inline void bspTick_mark34_dif_show_s(uint8_t SHOW_Windows, char *string){
-	printf_s(SHOW_Windows, "%s:%2d.%03ds %03dus", string, bsp_mark_dif_sec, bsp_mark_dif_ms, bsp_mark_dif_us);
+	printf_s(SHOW_Windows, "%s:%2d.%03ds %03dus", string, bsp_mark34_dif_sec, bsp_mark34_dif_ms, bsp_mark34_dif_us);
 }
 
 //*******************************// end_c               //************************************//
 #endif
+
+
+#if 0 //// stm32h7xx_it.c替换
+/**
+  * @brief This function handles TIM8 trigger and commutation interrupts and TIM14 global interrupt.
+  */
+void TIM8_TRG_COM_TIM14_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM8_TRG_COM_TIM14_IRQn 0 */
+  #if __HARDWARE_CONFIG__BSP_TIMER_ENABLE__ // begin of __HARDWARE_CONFIG__BSP_TIMER_ENABLE__
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    //? TIM14_IRQHandler_BSP_Timer_UPDATE
+    //-----------------------------------------------------------------
+    //
+    // Interrupt Excute Function: Once TIM7->CNT reached the maximum counter value 0xffff,
+    //                             update the BspTimerCnt.
+    // Detected Case: TIM7 Up Overflow
+    // Returned Value: update BspTimerCnt
+    // Notice: None
+    //
+    //-----------------------------------------------------------------
+    Update_SystemTick();
+  #endif // end of __HARDWARE_CONFIG__BSP_TIMER_ENABLE__
+  /* USER CODE END TIM8_TRG_COM_TIM14_IRQn 0 */
+  /* USER CODE BEGIN TIM8_TRG_COM_TIM14_IRQn 1 */
+
+  /* USER CODE END TIM8_TRG_COM_TIM14_IRQn 1 */
+}
+#endif
+
