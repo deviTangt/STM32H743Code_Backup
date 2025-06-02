@@ -89,7 +89,7 @@ inline void TIM3_IRQHandler_Func(void){
 		LL_TIM_ClearFlag_UPDATE(TIM3);				//清除向上计数溢出标志位
 		
 		#if __HARDWARE_CONFIG__DMA_ADC1_ENABLE__ // begin of __HARDWARE_CONFIG__DMA_ADC1_ENABLE__
-			printf_s_c("add bonus_wave.s0.id,0,%d", DMA_ADC_RX_BUF[0] >> 8);
+			printf_s_c("add bonus_wave.s0.id,0,%d", DMA_ADC1_RX_BUF[0] >> 8);
 		#endif // end of __HARDWARE_CONFIG__DMA_ADC1_ENABLE__
 		
 		timer3_call_cnt ++;

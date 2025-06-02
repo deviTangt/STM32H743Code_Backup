@@ -17,6 +17,8 @@
 #include "TFTLCD_Init.h"
 #include "TFTLCD.h"
 #include "dma_adc1.h"
+#include "dma_adc2.h"
+#include "dma_adc3.h"
 #include "user_timer01.h"
 #include "user_timer02.h"
 #include "user_timer03.h"

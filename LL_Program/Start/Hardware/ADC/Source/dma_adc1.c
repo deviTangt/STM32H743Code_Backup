@@ -5,8 +5,8 @@
 //*******************************// define parameters   //************************************//
 //*******************************// parameters          //************************************//
 
-uint16_t DMA_ADC_RX_BUF[DMA_ADC_RX_BUF_SIZE] __attribute__((section(".ARM.__at_0x24000200")));	//! STM32H743VIT6 下必须改变默认数组存储位置，不然无法使用DMA1
-uint32_t dma_adc_finish_cnt = 0;
+uint16_t DMA_ADC1_RX_BUF[DMA_ADC1_RX_BUF_SIZE] __attribute__((section(".ARM.__at_0x24000200")));	//! STM32H743VIT6 下必须改变默认数组存储位置，不然无法使用DMA1
+uint32_t dma_adc1_finish_cnt = 0;
 
 //*******************************// define function     //************************************//
 
@@ -40,17 +40,17 @@ void AD_TIM15_Init(){
 }
  
 //-----------------------------------------------------------------
-// void Samp_Adc_Init(uint32_t buff_Addr, uint32_t trans_Num)
+// void Samp_Adc1_Init(uint32_t buff_Addr, uint32_t trans_Num)
 //-----------------------------------------------------------------
 //
-// 函数功能: 采样ADC初始化
+// 函数功能: 采样ADC1初始化
 // 入口参数1: uint32_t buff_Addr: 采样数据缓存地址
 // 入口参数2: uint32_t trans_Num: DMA一次传输大小
 // 返 回 值: 无
 // 注意事项: 无
 //
 //-----------------------------------------------------------------
-void Samp_Adc_Init(uint32_t buff_Addr, uint32_t trans_Num){
+void Samp_Adc1_Init(uint32_t buff_Addr, uint32_t trans_Num){
 	//? 使能相应时钟 
 	LL_AHB4_GRP1_EnableClock(LL_AHB4_GRP1_PERIPH_GPIOA);	// GPIO时钟
 	LL_AHB4_GRP1_EnableClock(LL_AHB4_GRP1_PERIPH_GPIOB);
@@ -96,7 +96,9 @@ void Samp_Adc_Init(uint32_t buff_Addr, uint32_t trans_Num){
 		                   LL_DMA_Struct.MemoryOrM2MDstIncMode  = LL_DMA_MEMORY_INCREMENT;            // DMA发送目的地自增：启用
 		LL_DMA_Init(DMA1, LL_DMA_STREAM_2, &LL_DMA_Struct);  
 		//? 开启DMA传输完成中断 
-		LL_DMA_EnableIT_TC(DMA1, LL_DMA_STREAM_2);
+		#if __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_TC_ENABLE__ // begin of __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_TC_ENABLE__
+			LL_DMA_EnableIT_TC(DMA1, LL_DMA_STREAM_2);
+		#endif // end of __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_TC_ENABLE__
 
 		//? 配置中断优先级 
 		NVIC_SetPriority(DMA1_Stream2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 0));
@@ -140,39 +142,39 @@ void Samp_Adc_Init(uint32_t buff_Addr, uint32_t trans_Num){
 	                       ADC_REG_InitStruct.TriggerSource    = LL_ADC_REG_TRIG_EXT_TIM15_TRGO;      //? ADC触发源：TIM15更新事件触发
 	                       ADC_REG_InitStruct.DataTransferMode = LL_ADC_REG_DMA_TRANSFER_UNLIMITED;  // 数据传输模式：无限制DMA传输
 	                       ADC_REG_InitStruct.ContinuousMode   = LL_ADC_REG_CONV_SINGLE;             // ADC采样连续模式：单次非连续
-	                       ADC_REG_InitStruct.SequencerLength  = ADC_SequencerLength_Num;            //! ADC采样序列长度：扫描
+	                       ADC_REG_InitStruct.SequencerLength  = ADC1_SequencerLength_Num;            //! ADC采样序列长度：扫描
 	                       ADC_REG_InitStruct.SequencerDiscont = LL_ADC_REG_SEQ_DISCONT_DISABLE;     // ADC采样序列离散
 	                       ADC_REG_InitStruct.Overrun          = LL_ADC_REG_OVR_DATA_OVERWRITTEN;    // ADC过采样：数据覆盖
 	LL_ADC_REG_Init(ADC1, &ADC_REG_InitStruct);
 	LL_ADC_REG_SetTriggerEdge(ADC1, LL_ADC_REG_TRIG_EXT_RISING);  // 设置触发源模式：上升沿触发
 
 	//? 配置规则通道 
-	LL_ADC_REG_SetSequencerRanks  (ADC1, LL_ADC_REG_RANK_1, ADC_Sequence_Channel_1);          // 设置采样序列1 ADC通道
-	LL_ADC_SetChannelSamplingTime(ADC1, ADC_Sequence_Channel_1, ADC_Sequence_Sample_Period);  // 设置采样周期
-	LL_ADC_SetChannelSingleDiff   (ADC1, ADC_Sequence_Channel_1, LL_ADC_SINGLE_ENDED);        // 设置单端口ADC或双端口ADC输入：单端输入
+	LL_ADC_REG_SetSequencerRanks  (ADC1, LL_ADC_REG_RANK_1, ADC1_Sequence_Channel_1);          // 设置采样序列1 ADC通道
+	LL_ADC_SetChannelSamplingTime(ADC1, ADC1_Sequence_Channel_1, ADC1_Sequence_Sample_Period);  // 设置采样周期
+	LL_ADC_SetChannelSingleDiff   (ADC1, ADC1_Sequence_Channel_1, LL_ADC_SINGLE_ENDED);        // 设置单端口ADC或双端口ADC输入：单端输入
 
-	LL_ADC_REG_SetSequencerRanks  (ADC1, LL_ADC_REG_RANK_2, ADC_Sequence_Channel_2);          // 设置采样序列2 ADC通道
-	LL_ADC_SetChannelSamplingTime(ADC1, ADC_Sequence_Channel_2, ADC_Sequence_Sample_Period);  // 设置采样周期
-	LL_ADC_SetChannelSingleDiff   (ADC1, ADC_Sequence_Channel_2, LL_ADC_SINGLE_ENDED);        // 设置单端口ADC或双端口ADC输入：单端输入
+	LL_ADC_REG_SetSequencerRanks  (ADC1, LL_ADC_REG_RANK_2, ADC1_Sequence_Channel_2);           // 设置采样序列2 ADC通道
+	LL_ADC_SetChannelSamplingTime(ADC1, ADC1_Sequence_Channel_2, ADC1_Sequence_Sample_Period);  // 设置采样周期
+	LL_ADC_SetChannelSingleDiff   (ADC1, ADC1_Sequence_Channel_2, LL_ADC_SINGLE_ENDED);         // 设置单端口ADC或双端口ADC输入：单端输入
 
-	LL_ADC_REG_SetSequencerRanks  (ADC1, LL_ADC_REG_RANK_3, ADC_Sequence_Channel_3);          // 设置采样序列3 ADC通道
-	LL_ADC_SetChannelSamplingTime(ADC1, ADC_Sequence_Channel_3, ADC_Sequence_Sample_Period);  // 设置采样周期
-	LL_ADC_SetChannelSingleDiff   (ADC1, ADC_Sequence_Channel_3, LL_ADC_SINGLE_ENDED);        // 设置单端口ADC或双端口ADC输入：单端输入
+	LL_ADC_REG_SetSequencerRanks  (ADC1, LL_ADC_REG_RANK_3, ADC1_Sequence_Channel_3);           // 设置采样序列3 ADC通道
+	LL_ADC_SetChannelSamplingTime(ADC1, ADC1_Sequence_Channel_3, ADC1_Sequence_Sample_Period);  // 设置采样周期
+	LL_ADC_SetChannelSingleDiff   (ADC1, ADC1_Sequence_Channel_3, LL_ADC_SINGLE_ENDED);         // 设置单端口ADC或双端口ADC输入：单端输入
 
-	LL_ADC_REG_SetSequencerRanks  (ADC1, LL_ADC_REG_RANK_4, ADC_Sequence_Channel_4);          // 设置采样序列4 ADC通道
-	LL_ADC_SetChannelSamplingTime(ADC1, ADC_Sequence_Channel_4, ADC_Sequence_Sample_Period);  // 设置采样周期
-	LL_ADC_SetChannelSingleDiff   (ADC1, ADC_Sequence_Channel_4, LL_ADC_DIFFERENTIAL_ENDED);  // 设置单端口ADC或双端口ADC输入：差分输入
+	LL_ADC_REG_SetSequencerRanks  (ADC1, LL_ADC_REG_RANK_4, ADC1_Sequence_Channel_4);           // 设置采样序列4 ADC通道
+	LL_ADC_SetChannelSamplingTime(ADC1, ADC1_Sequence_Channel_4, ADC1_Sequence_Sample_Period);  // 设置采样周期
+	LL_ADC_SetChannelSingleDiff   (ADC1, ADC1_Sequence_Channel_4, LL_ADC_DIFFERENTIAL_ENDED);   // 设置单端口ADC或双端口ADC输入：差分输入
 
-	LL_ADC_REG_SetSequencerRanks  (ADC1, LL_ADC_REG_RANK_5, ADC_Sequence_Channel_5);          // 设置采样序列5 ADC通道
-	LL_ADC_SetChannelSamplingTime(ADC1, ADC_Sequence_Channel_5, ADC_Sequence_Sample_Period);  // 设置采样周期
-	LL_ADC_SetChannelSingleDiff   (ADC1, ADC_Sequence_Channel_5, LL_ADC_DIFFERENTIAL_ENDED);  // 设置单端口ADC或双端口ADC输入：差分输入
+	LL_ADC_REG_SetSequencerRanks  (ADC1, LL_ADC_REG_RANK_5, ADC1_Sequence_Channel_5);           // 设置采样序列5 ADC通道
+	LL_ADC_SetChannelSamplingTime(ADC1, ADC1_Sequence_Channel_5, ADC1_Sequence_Sample_Period);  // 设置采样周期
+	LL_ADC_SetChannelSingleDiff   (ADC1, ADC1_Sequence_Channel_5, LL_ADC_DIFFERENTIAL_ENDED);   // 设置单端口ADC或双端口ADC输入：差分输入
 
 	//? 通道预选设置，这个很关键
-	ADC1->PCSEL |= (1UL << (__LL_ADC_CHANNEL_TO_DECIMAL_NB(ADC_Sequence_Channel_1) & 0x1FUL));
-	ADC1->PCSEL |= (1UL << (__LL_ADC_CHANNEL_TO_DECIMAL_NB(ADC_Sequence_Channel_2) & 0x1FUL));
-	ADC1->PCSEL |= (1UL << (__LL_ADC_CHANNEL_TO_DECIMAL_NB(ADC_Sequence_Channel_3) & 0x1FUL));  
-	ADC1->PCSEL |= (1UL << (__LL_ADC_CHANNEL_TO_DECIMAL_NB(ADC_Sequence_Channel_4) & 0x1FUL));  
-	ADC1->PCSEL |= (1UL << (__LL_ADC_CHANNEL_TO_DECIMAL_NB(ADC_Sequence_Channel_5) & 0x1FUL));  
+	ADC1->PCSEL |= (1UL << (__LL_ADC_CHANNEL_TO_DECIMAL_NB(ADC1_Sequence_Channel_1) & 0x1FUL));
+	ADC1->PCSEL |= (1UL << (__LL_ADC_CHANNEL_TO_DECIMAL_NB(ADC1_Sequence_Channel_2) & 0x1FUL));
+	ADC1->PCSEL |= (1UL << (__LL_ADC_CHANNEL_TO_DECIMAL_NB(ADC1_Sequence_Channel_3) & 0x1FUL));  
+	ADC1->PCSEL |= (1UL << (__LL_ADC_CHANNEL_TO_DECIMAL_NB(ADC1_Sequence_Channel_4) & 0x1FUL));  
+	ADC1->PCSEL |= (1UL << (__LL_ADC_CHANNEL_TO_DECIMAL_NB(ADC1_Sequence_Channel_5) & 0x1FUL));  
 
 	//? 设置ADC传输方式
 	#if __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__ // begin of __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__
@@ -189,7 +191,7 @@ void Samp_Adc_Init(uint32_t buff_Addr, uint32_t trans_Num){
 }
  
 //-----------------------------------------------------------------
-// void Start_Sample()
+// void Start_Sample_adc1()
 //-----------------------------------------------------------------
 //
 // 函数功能: 开始采样
@@ -198,8 +200,7 @@ void Samp_Adc_Init(uint32_t buff_Addr, uint32_t trans_Num){
 // 注意事项: 无
 //
 //-----------------------------------------------------------------
-void Start_Sample()
-{
+void Start_Sample_adc1(){
 	#if __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__ // begin of __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__	
 		LL_DMA_EnableStream(DMA1, LL_DMA_STREAM_2);						 // 使能DMA
 	#endif // end of __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__
@@ -210,7 +211,7 @@ void Start_Sample()
 	LL_TIM_EnableCounter      (TIM15);                                    // 启用定时器
 }
 //-----------------------------------------------------------------
-// void Stop_Sample()
+// void Stop_Sample_adc1()
 //-----------------------------------------------------------------
 //
 // 函数功能: 停止采样
@@ -219,8 +220,7 @@ void Start_Sample()
 // 注意事项: 无
 //
 //-----------------------------------------------------------------
-void Stop_Sample()
-{
+void Stop_Sample_adc1(){
 	LL_TIM_DisableCounter     (TIM15);                                       // 关闭定时器
 	LL_ADC_REG_StopConversion (ADC1);                                       // 停止ADC转换
 	while(LL_ADC_REG_IsConversionOngoing(ADC1) != 0);  						// 等待转换停止
@@ -229,7 +229,7 @@ void Stop_Sample()
 
 	#if __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__ // begin of __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__
 		LL_DMA_DisableStream(DMA1, LL_DMA_STREAM_2);  // 关闭DMA通道
-		LL_DMA_ClearFlag_TC0(DMA1);                   // 清除TC标志位
+		LL_DMA_ClearFlag_TC2(DMA1);                   // 清除TC标志位
 	#endif // end of __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__
 }
  
@@ -248,7 +248,7 @@ void DMA1_Stream2_IRQHandler_Func(){
 	if(LL_DMA_IsActiveFlag_TC2(DMA1) == SET){ // 用于检测采样率是否准确的（1M采样率时，DMA传输1000个数据大概时间是1ms）
 		LL_DMA_ClearFlag_TC2(DMA1);	   
     
-        dma_adc_finish_cnt ++;
+        dma_adc1_finish_cnt ++;
 	}
 }
  

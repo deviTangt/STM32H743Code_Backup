@@ -294,7 +294,7 @@
         "proType": "SWD",
         "resetMode": "default",
         "runAfterProgram": true,
-        "speed": "40000",
+        "speed": 4000,
         "address": "0x8000000",
         "elFile": "None",
         "optionBytes": ".eide/start.st.option.bytes.ini",

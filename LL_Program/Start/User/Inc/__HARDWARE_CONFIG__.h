@@ -25,8 +25,15 @@
 
 #define __HARDWARE_CONFIG__GPU_TEMP_ADC_ENABLE__        0       // 启用gpu_temp_adc.h
 
-#define __HARDWARE_CONFIG__DMA_ADC1_ENABLE__            0       // 启用dma_adc1.h
+#define __HARDWARE_CONFIG__DMA_ADC1_ENABLE__            1       // 启用dma_adc1.h
     #define __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_ENABLE__      1       // 启用dma传输ADC1采样
+    #define __HARDWARE_CONFIG__SAMPLE_ADC1_DMA_TC_ENABLE__   1       // 启用dma传输ADC1发送中断
+#define __HARDWARE_CONFIG__DMA_ADC2_ENABLE__            1       // 启用dma_adc2.h
+    #define __HARDWARE_CONFIG__SAMPLE_ADC2_DMA_ENABLE__      1       // 启用dma传输ADC2采样
+    #define __HARDWARE_CONFIG__SAMPLE_ADC2_DMA_TC_ENABLE__   0       // 启用dma传输ADC2发送中断
+#define __HARDWARE_CONFIG__DMA_ADC3_ENABLE__            1       // 启用dma_adc3.h
+    #define __HARDWARE_CONFIG__SAMPLE_ADC3_DMA_ENABLE__      1       // 启用dma传输ADC3采样
+    #define __HARDWARE_CONFIG__SAMPLE_ADC3_DMA_TC_ENABLE__   0       // 启用dma传输ADC3发送中断
 
 #define __HARDWARE_CONFIG__AD9959_ENABLE__              0       // 启用ad9959.h    
 

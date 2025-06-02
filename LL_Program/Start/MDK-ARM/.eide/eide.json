@@ -205,6 +205,12 @@
               },
               {
                 "path": "../Hardware/ADC/Source/dma_adc1.c"
+              },
+              {
+                "path": "../Hardware/ADC/Source/dma_adc2.c"
+              },
+              {
+                "path": "../Hardware/ADC/Source/dma_adc3.c"
               }
             ],
             "folders": []

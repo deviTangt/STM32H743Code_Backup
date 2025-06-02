@@ -115,10 +115,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1){
     //*******************************// real time                   //************************************//
-    // bspTick_mark_1_set();
+    bspTick_mark_4_set();
+    bspTick_mark34_dif_show_s(19, "One turn");
     printf_s(20, "min:%3d sec:%02d.%03d us:%03d\r\n", bsp_min, bsp_sec % 60, bsp_ms % 1000, bsp_us % 1000);
-    // bspTick_mark_2_set();
-    // bspTick_mark_dif_show(14);
+    bspTick_mark_3_set();
 
     //*******************************// while logic                 //************************************//
     /* USER CODE END WHILE */

@@ -25,13 +25,27 @@ inline void config_init(){
         TJC_USART_Config_Init();
     #endif // end of __HARDWARE_CONFIG__TJC_USART_ENABLE__  
 
-    //? ADC Initialized
+    //? ADC1 Initialized
     #if __HARDWARE_CONFIG__DMA_ADC1_ENABLE__ // begin of __HARDWARE_CONFIG__DMA_ADC1_ENABLE__
-        Samp_Adc_Init((uint32_t)&DMA_ADC_RX_BUF, ADC_Sequence_Channel_Num);
+        Samp_Adc1_Init((uint32_t)&DMA_ADC1_RX_BUF, ADC1_Sequence_Channel_Num);
         #if 1   // 是否开始采样
-            Start_Sample();
+            Start_Sample_adc1();
         #endif
     #endif // end of __HARDWARE_CONFIG__DMA_ADC1_ENABLE__
+
+    #if __HARDWARE_CONFIG__DMA_ADC2_ENABLE__ // begin of __HARDWARE_CONFIG__DMA_ADC2_ENABLE__
+        Samp_Adc2_Init((uint32_t)&DMA_ADC2_RX_BUF, ADC2_Sequence_Channel_Num);
+        #if 2   // 是否开始采样
+            Start_Sample_adc2();
+        #endif
+    #endif // end of __HARDWARE_CONFIG__DMA_ADC2_ENABLE__
+
+    #if __HARDWARE_CONFIG__DMA_ADC3_ENABLE__ // begin of __HARDWARE_CONFIG__DMA_ADC3_ENABLE__
+        Samp_Adc3_Init((uint32_t)&DMA_ADC3_RX_BUF, ADC3_Sequence_Channel_Num);
+        #if 3   // 是否开始采样
+            Start_Sample_adc3();
+        #endif
+    #endif // end of __HARDWARE_CONFIG__DMA_ADC3_ENABLE__
 
     //? gpu temperature sensor adc config
     #if __HARDWARE_CONFIG__GPU_TEMP_ADC_ENABLE__ // begin of __HARDWARE_CONFIG__GPU_TEMP_ADC_ENABLE__

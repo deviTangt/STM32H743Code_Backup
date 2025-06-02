@@ -269,6 +269,56 @@ void DMA1_Stream2_IRQHandler(void)
 }
 
 /**
+  * @brief This function handles DMA1 stream3 global interrupt.
+  */
+void DMA1_Stream3_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Stream3_IRQn 0 */
+  #if __HARDWARE_CONFIG__DMA_ADC2_ENABLE__ // begin of __HARDWARE_CONFIG__DMA_ADC2_ENABLE__
+    //-----------------------------------------------------------------
+    //? DMA1_Stream3_IRQHandler_Func
+    //-----------------------------------------------------------------
+    //
+    // Interrupt Excute Function: ADC
+    // Detected Case: ADC DMA Finish
+    // Returned Value: None
+    // Notice: None
+    //
+    //-----------------------------------------------------------------
+    DMA1_Stream3_IRQHandler_Func();
+  #endif // end of __HARDWARE_CONFIG__DMA_ADC2_ENABLE__
+  /* USER CODE END DMA1_Stream3_IRQn 0 */
+  /* USER CODE BEGIN DMA1_Stream3_IRQn 1 */
+
+  /* USER CODE END DMA1_Stream3_IRQn 1 */
+}
+
+/**
+  * @brief This function handles DMA1 stream4 global interrupt.
+  */
+void DMA1_Stream4_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Stream4_IRQn 0 */
+  #if __HARDWARE_CONFIG__DMA_ADC3_ENABLE__ // begin of __HARDWARE_CONFIG__DMA_ADC3_ENABLE__
+    //-----------------------------------------------------------------
+    //? DMA1_Stream4_IRQHandler_Func
+    //-----------------------------------------------------------------
+    //
+    // Interrupt Excute Function: ADC
+    // Detected Case: ADC DMA Finish
+    // Returned Value: None
+    // Notice: None
+    //
+    //-----------------------------------------------------------------
+    DMA1_Stream4_IRQHandler_Func();
+  #endif // end of __HARDWARE_CONFIG__DMA_ADC3_ENABLE__
+  /* USER CODE END DMA1_Stream4_IRQn 0 */
+  /* USER CODE BEGIN DMA1_Stream4_IRQn 1 */
+
+  /* USER CODE END DMA1_Stream4_IRQn 1 */
+}
+
+/**
   * @brief This function handles ADC1 and ADC2 global interrupts.
   */
 void ADC_IRQHandler(void)
@@ -314,19 +364,6 @@ void EXTI9_5_IRQHandler(void)
   /* USER CODE BEGIN EXTI9_5_IRQn 1 */
 
   /* USER CODE END EXTI9_5_IRQn 1 */
-}
-
-/**
-  * @brief This function handles TIM1 break interrupt.
-  */
-void TIM1_BRK_IRQHandler(void)
-{
-  /* USER CODE BEGIN TIM1_BRK_IRQn 0 */
-
-  /* USER CODE END TIM1_BRK_IRQn 0 */
-  /* USER CODE BEGIN TIM1_BRK_IRQn 1 */
-
-  /* USER CODE END TIM1_BRK_IRQn 1 */
 }
 
 /**
@@ -718,6 +755,19 @@ void TIM17_IRQHandler(void)
   /* USER CODE BEGIN TIM17_IRQn 1 */
 
   /* USER CODE END TIM17_IRQn 1 */
+}
+
+/**
+  * @brief This function handles ADC3 global interrupt.
+  */
+void ADC3_IRQHandler(void)
+{
+  /* USER CODE BEGIN ADC3_IRQn 0 */
+
+  /* USER CODE END ADC3_IRQn 0 */
+  /* USER CODE BEGIN ADC3_IRQn 1 */
+
+  /* USER CODE END ADC3_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

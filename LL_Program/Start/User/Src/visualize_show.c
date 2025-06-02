@@ -46,11 +46,23 @@ void visualize_show(){
 
     //? dma adcÊý¾Ý
     #if __HARDWARE_CONFIG__DMA_ADC1_ENABLE__ // begin of __HARDWARE_CONFIG__DMA_ADC1_ENABLE__
-      printf_s(4, "dma_cnt:%d,%0d,%0d", dma_adc_finish_cnt / 1000000, dma_adc_finish_cnt / 1000 % 1000, dma_adc_finish_cnt % 1000);
-      for (uint8_t i = 0;i < 2;i ++){
-        printf_s(5 + i, "AD_val %d:%dmV", i, (DMA_ADC_RX_BUF[i] * 3300) >> 16);
+      printf_s(5, "dma_cnt:%d,%0d,%0d", dma_adc1_finish_cnt / 1000000, dma_adc1_finish_cnt / 1000 % 1000, dma_adc1_finish_cnt % 1000);
+      for (uint8_t i = 0;i < 1;i ++){
+        printf_s(6 + i, "AD1_val %d:%dmV", i, (DMA_ADC1_RX_BUF[i] * 3300) >> 16);
       }
     #endif // end of __HARDWARE_CONFIG__DMA_ADC1_ENABLE__
+    #if __HARDWARE_CONFIG__DMA_ADC2_ENABLE__ // begin of __HARDWARE_CONFIG__DMA_ADC2_ENABLE__
+      //printf_s(7, "dma_cnt:%d,%0d,%0d", dma_adc2_finish_cnt / 1000000, dma_adc2_finish_cnt / 1000 % 1000, dma_adc2_finish_cnt % 1000);
+      for (uint8_t i = 0;i < 1;i ++){
+        printf_s(8 + i, "AD2_val %d:%dmV", i, (DMA_ADC2_RX_BUF[i] * 3300) >> 16);
+      }
+    #endif // end of __HARDWARE_CONFIG__DMA_ADC3_ENABLE__
+    #if __HARDWARE_CONFIG__DMA_ADC3_ENABLE__ // begin of __HARDWARE_CONFIG__DMA_ADC3_ENABLE__
+      //printf_s(9, "dma_cnt:%d,%0d,%0d", dma_adc3_finish_cnt / 1000000, dma_adc3_finish_cnt / 1000 % 1000, dma_adc3_finish_cnt % 1000);
+      for (uint8_t i = 0;i < 1;i ++){
+        printf_s(10 + i, "AD3_val %d:%dmV", i, (DMA_ADC3_RX_BUF[i] * 3300) >> 16);
+      }
+    #endif // end of __HARDWARE_CONFIG__DMA_ADC3_ENABLE__
     
 }
 
