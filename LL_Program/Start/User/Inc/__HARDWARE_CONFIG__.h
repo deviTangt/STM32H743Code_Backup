@@ -80,6 +80,8 @@
         #define __HARDWARE_CONFIG__TIMER15_INT_UPDATE_ENABLE__      0       // 启用timer15更新中断 
         #define __HARDWARE_CONFIG__TIMER16_INT_UPDATE_ENABLE__      0       // 启用timer16更新中断 
         #define __HARDWARE_CONFIG__TIMER17_INT_UPDATE_ENABLE__      0       // 启用timer17更新中断 
+        //? 定时器CC中断启用设置
+        #define __HARDWARE_CONFIG__TIMER2_INT_CAPTURE_ENABLE__      1       // 启用timer2捕获中断
 
 //*******************************// extern parameters       //************************************//
 //*******************************// define structure unity  //************************************//

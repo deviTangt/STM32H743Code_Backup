@@ -41,7 +41,7 @@ inline void timer7_config_init(){
 	LL_TIM_SetTriggerOutput  (TIM7, LL_TIM_TRGO_RESET);            // 复位更新
 	LL_TIM_DisableMasterSlaveMode(TIM7);
 
-  //? 标志位
+  //? UPDATE标志位
 	#if __HARDWARE_CONFIG__TIMER7_INT_UPDATE_ENABLE__ // begin of __HARDWARE_CONFIG__TIMER7_INT_UPDATE_ENABLE__
 		LL_TIM_ClearFlag_UPDATE(TIM7);  // 清除向上计数溢出标志位
 		LL_TIM_EnableIT_UPDATE (TIM7);  // 使能定时器向上计数中断
@@ -68,7 +68,7 @@ inline void timer7_start(){
 //
 // 函数功能: 关闭定时器7
 // 入口参数1: 无
-// 返 回 值: 无
+// 返 回 值: 无SSSSS
 // 注意事项: 无
 //
 //-----------------------------------------------------------------

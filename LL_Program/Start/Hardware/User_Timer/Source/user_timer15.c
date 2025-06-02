@@ -41,7 +41,7 @@ inline void timer15_config_init(){
 	LL_TIM_SetTriggerOutput  (TIM15, LL_TIM_TRGO_RESET);            // 复位更新
 	LL_TIM_DisableMasterSlaveMode(TIM15);
 
-  //? 标志位
+  //? UPDATE标志位
 	#if __HARDWARE_CONFIG__TIMER15_INT_UPDATE_ENABLE__ // begin of __HARDWARE_CONFIG__TIMER15_INT_UPDATE_ENABLE__
 		LL_TIM_ClearFlag_UPDATE(TIM15);  // 清除向上计数溢出标志位
 		LL_TIM_EnableIT_UPDATE (TIM15);  // 使能定时器向上计数中断
