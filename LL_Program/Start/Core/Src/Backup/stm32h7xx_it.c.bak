@@ -299,7 +299,19 @@ void DMA1_Stream3_IRQHandler(void)
 void DMA1_Stream4_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Stream4_IRQn 0 */
-
+  #if __HARDWARE_CONFIG__DMA_ADC3_ENABLE__ // begin of __HARDWARE_CONFIG__DMA_ADC3_ENABLE__
+    //-----------------------------------------------------------------
+    //? DMA1_Stream4_IRQHandler_Func
+    //-----------------------------------------------------------------
+    //
+    // Interrupt Excute Function: ADC
+    // Detected Case: ADC DMA Finish
+    // Returned Value: None
+    // Notice: None
+    //
+    //-----------------------------------------------------------------
+    DMA1_Stream4_IRQHandler_Func();
+  #endif // end of __HARDWARE_CONFIG__DMA_ADC3_ENABLE__
   /* USER CODE END DMA1_Stream4_IRQn 0 */
   /* USER CODE BEGIN DMA1_Stream4_IRQn 1 */
 

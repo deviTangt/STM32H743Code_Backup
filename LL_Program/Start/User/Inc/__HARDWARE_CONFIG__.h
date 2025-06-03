@@ -33,7 +33,7 @@
 #define __HARDWARE_CONFIG__GPU_TEMP_ADC_ENABLE__            0       // 启用gpu_temp_adc.h
 
 //? ADC采样设置
-#define __HARDWARE_CONFIG__DMA_ADC1_ENABLE__                1       // 启用dma_adc1.h
+#define __HARDWARE_CONFIG__DMA_ADC1_ENABLE__                0       // 启用dma_adc1.h
 #define __HARDWARE_CONFIG__DMA_ADC2_ENABLE__                0       // 启用dma_adc2.h
 #define __HARDWARE_CONFIG__DMA_ADC3_ENABLE__                0       // 启用dma_adc3.h
     //? ADC dma传输启用设置

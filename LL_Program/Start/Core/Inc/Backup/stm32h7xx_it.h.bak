@@ -31,6 +31,7 @@ extern "C" {
 #include "LED.h"
 #include "dma_adc1.h"
 #include "dma_adc2.h"
+#include "dma_adc3.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

@@ -67,6 +67,8 @@ extern "C" {
 #include "user_timer15.h"
 #include "user_timer16.h"
 #include "user_timer17.h"
+#include "arm_math.h"
+#include "arm_const_structs.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

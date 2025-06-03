@@ -40,6 +40,9 @@
               },
               {
                 "path": "../User/Src/visualize_show.c"
+              },
+              {
+                "path": "../Drivers/CMSIS/DSP/Examples/ARM/arm_fft_bin_example/arm_fft_bin_data.c"
               }
             ],
             "folders": []
@@ -115,6 +118,24 @@
             "files": [
               {
                 "path": "../Core/Src/system_stm32h7xx.c"
+              }
+            ],
+            "folders": []
+          },
+          {
+            "name": "DSP",
+            "files": [
+              {
+                "path": "../Middlewares/ST/ARM/DSP/Inc/arm_math.h"
+              },
+              {
+                "path": "../Drivers/CMSIS/DSP/Include/arm_common_tables.h"
+              },
+              {
+                "path": "../Drivers/CMSIS/DSP/Include/arm_const_structs.h"
+              },
+              {
+                "path": "../Drivers/CMSIS/DSP/Lib/ARM/arm_cortexM7lfdp_math.lib"
               }
             ],
             "folders": []
@@ -392,7 +413,8 @@
           "../User/Inc",
           "../Hardware/User_Timer/Include",
           "../Hardware/Variety/Include",
-          "../Hardware/ADC/Include"
+          "../Hardware/ADC/Include",
+          "../Drivers/CMSIS/DSP/Include"
         ],
         "libList": [],
         "defineList": [
@@ -406,7 +428,11 @@
           "LSI_VALUE=32000",
           "VDD_VALUE=3300",
           "USE_PWR_LDO_SUPPLY",
-          "STM32H743xx"
+          "STM32H743xx",
+          "ARM_MATH_CM7",
+          "__CC_ARM",
+          "__FPU_PRESENT=1",
+          "__FPU_USED=1"
         ]
       },
       "builderOptions": {
