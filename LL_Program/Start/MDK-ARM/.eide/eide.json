@@ -43,6 +43,9 @@
               },
               {
                 "path": "../Drivers/CMSIS/DSP/Examples/ARM/arm_fft_bin_example/arm_fft_bin_data.c"
+              },
+              {
+                "path": "../User/Src/user_test.c"
               }
             ],
             "folders": []

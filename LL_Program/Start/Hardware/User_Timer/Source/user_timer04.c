@@ -27,11 +27,11 @@ inline void timer4_config_init(){
 	NVIC_SetPriority(TIM4_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),4, 2));
     NVIC_EnableIRQ(TIM4_IRQn);
 
-	//? 配置定时器结构体 1000us
+	//? 配置定时器结构体 100kHz
 	LL_TIM_InitTypeDef TIM_InitStruct               = {0};
 	                   TIM_InitStruct.Prescaler     = 240 - 1;
 	                   TIM_InitStruct.CounterMode   = LL_TIM_COUNTERMODE_UP;      // 预分频
-	                   TIM_InitStruct.Autoreload    = 1000 - 1;                    // 计数模式：向上计数
+	                   TIM_InitStruct.Autoreload    = 10 - 1;                    // 计数模式：向上计数
 	                   TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;  // 自动重装载值
 	LL_TIM_Init(TIM4, &TIM_InitStruct);
 
@@ -92,7 +92,10 @@ inline void TIM4_IRQHandler_Func(void){
 	if(LL_TIM_IsActiveFlag_UPDATE(TIM4) == SET){	//判断定时器是否溢出
 		LL_TIM_ClearFlag_UPDATE(TIM4);				//清除向上计数溢出标志位
 		
-		timer4_call_cnt ++;
+    if (sample_ad_cnt < fft_adc_n){
+      sample_ad_value[sample_ad_cnt ++] = DMA_ADC1_RX_BUF[0];
+      timer4_call_cnt ++;
+    }
 	}
 }
 

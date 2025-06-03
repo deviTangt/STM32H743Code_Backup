@@ -5,7 +5,7 @@
 //*******************************// define parameters   //************************************//
 //*******************************// parameters          //************************************//
 
-uint32_t i;
+static uint32_t i;
 static char String_Temp[STRING_MAX_LENGTH];
 #if __HARDWARE_CONFIG__TJC_DMA_ENABLE__ // begin of __HARDWARE_CONFIG__TJC_DMA_ENABLE__
 	char DMA_TX_BUF[DMA_TX_BUF_MAX] __attribute__((section(".ARM.__at_0x24000000")));

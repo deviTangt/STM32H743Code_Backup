@@ -22,6 +22,7 @@
 #include "memorymap.h"
 #include "usart.h"
 #include "gpio.h"
+#include "user_test.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -61,17 +62,8 @@ static void MPU_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 uint32_t t = 0;
-
-#define TEST_LENGTH_SAMPLES 2048
-
-extern float32_t testInput_f32_10khz[TEST_LENGTH_SAMPLES];//only have 1024
-static float32_t testOutput[TEST_LENGTH_SAMPLES/2];
-uint32_t fftSize = 1024;
-uint32_t ifftFlag = 0;
-uint32_t doBitReverse = 1;
-
-/* 库的最大能量发生时的参考索引 */
-uint32_t refIndex = 213, testIndex = 0;
+uint32_t i = 0;
+uint8_t is_fft_try = 0;
 
 /* USER CODE END 0 */
 
@@ -120,36 +112,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
   config_init();  //! various periph initialized
 
-  arm_status status;
-	float32_t maxValue;
-	
-	status = ARM_MATH_SUCCESS;
-	
-	/* Process the data through the CFFT/CIFFT module */
-	arm_cfft_f32(&arm_cfft_sR_f32_len1024, testInput_f32_10khz, ifftFlag, doBitReverse);
-	
-	/* Process the data through the Complex Magnitude Module for
-	calculating the magnitude at each bin */
-	arm_cmplx_mag_f32(testInput_f32_10khz, testOutput, fftSize);
-	
-	/* Calculates maxValue and returns corresponding BIN value */
-	arm_max_f32(testOutput, fftSize, &maxValue, &testIndex);
-	
-	if (testIndex !=  refIndex)
-	{
-		status = ARM_MATH_TEST_FAILURE;
-	}
-	
-	/* ----------------------------------------------------------------------
-	** Loop here if the signals fail the PASS check.
-	** This denotes a test failure
-	** ------------------------------------------------------------------- */
-	
-	if ( status != ARM_MATH_SUCCESS)
-	{
-		//while (1);
-	}
-	
+
+  //user_test_func();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -165,12 +129,13 @@ int main(void)
     /* USER CODE END WHILE */
     
     /* USER CODE BEGIN 3 */
-    delay_ms(5000);
-    for(int i =0;i<1024;i++)
-		{
-			printf("%f \r\n",testOutput[i]);
-			delay_ms(10);
-		}
+    printf_s(7, "sample_ad_cnt:%d", sample_ad_cnt);
+    if (sample_ad_cnt == fft_adc_n && is_fft_try == 0){
+      is_fft_try = 1;
+
+      printf("Flash\r\n");
+      user_test_func();
+    }
 
     visualize_show();   //! visualize debug
   }
