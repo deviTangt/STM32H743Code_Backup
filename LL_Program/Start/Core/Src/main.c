@@ -22,7 +22,6 @@
 #include "memorymap.h"
 #include "usart.h"
 #include "gpio.h"
-#include "user_test.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -127,7 +126,7 @@ int main(void)
 
     //*******************************// while logic                 //************************************//
     /* USER CODE END WHILE */
-    
+
     /* USER CODE BEGIN 3 */
     printf_s(7, "sample_ad_cnt:%d", sample_ad_cnt);
     if (sample_ad_cnt == fft_adc_n && is_fft_try == 0){
@@ -157,23 +156,21 @@ void SystemClock_Config(void)
   while (LL_PWR_IsActiveFlag_VOS() == 0)
   {
   }
-  LL_RCC_HSI_Enable();
+  LL_RCC_HSE_Enable();
 
-   /* Wait till HSI is ready */
-  while(LL_RCC_HSI_IsReady() != 1)
+   /* Wait till HSE is ready */
+  while(LL_RCC_HSE_IsReady() != 1)
   {
 
   }
-  LL_RCC_HSI_SetCalibTrimming(64);
-  LL_RCC_HSI_SetDivider(LL_RCC_HSI_DIV1);
-  LL_RCC_PLL_SetSource(LL_RCC_PLLSOURCE_HSI);
+  LL_RCC_PLL_SetSource(LL_RCC_PLLSOURCE_HSE);
   LL_RCC_PLL1P_Enable();
-  LL_RCC_PLL1_SetVCOInputRange(LL_RCC_PLLINPUTRANGE_8_16);
+  LL_RCC_PLL1_SetVCOInputRange(LL_RCC_PLLINPUTRANGE_4_8);
   LL_RCC_PLL1_SetVCOOutputRange(LL_RCC_PLLVCORANGE_WIDE);
-  LL_RCC_PLL1_SetM(4);
-  LL_RCC_PLL1_SetN(60);
+  LL_RCC_PLL1_SetM(5);
+  LL_RCC_PLL1_SetN(192);
   LL_RCC_PLL1_SetP(2);
-  LL_RCC_PLL1_SetQ(2);
+  LL_RCC_PLL1_SetQ(15);
   LL_RCC_PLL1_SetR(2);
   LL_RCC_PLL1_Enable();
 
@@ -213,8 +210,8 @@ void PeriphCommonClock_Config(void)
   LL_RCC_PLL2P_Enable();
   LL_RCC_PLL2_SetVCOInputRange(LL_RCC_PLLINPUTRANGE_8_16);
   LL_RCC_PLL2_SetVCOOutputRange(LL_RCC_PLLVCORANGE_MEDIUM);
-  LL_RCC_PLL2_SetM(4);
-  LL_RCC_PLL2_SetN(10);
+  LL_RCC_PLL2_SetM(2);
+  LL_RCC_PLL2_SetN(12);
   LL_RCC_PLL2_SetP(2);
   LL_RCC_PLL2_SetQ(2);
   LL_RCC_PLL2_SetR(2);
@@ -235,6 +232,7 @@ void PeriphCommonClock_Config(void)
 
 void MPU_Config(void)
 {
+
   /* Disables the MPU */
   LL_MPU_Disable();
 

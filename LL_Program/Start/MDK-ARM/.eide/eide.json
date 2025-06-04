@@ -112,6 +112,9 @@
               },
               {
                 "path": "../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_adc.c"
+              },
+              {
+                "path": "../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_usb.c"
               }
             ],
             "folders": []
@@ -407,7 +410,6 @@
         "name": "default",
         "incList": [
           "../Core/Inc",
-          "../Drivers/STM32H7xx_HAL_Driver/Inc",
           "../Drivers/CMSIS/Device/ST/STM32H7xx/Include",
           "../Drivers/CMSIS/Include",
           ".cmsis/include",
@@ -417,7 +419,8 @@
           "../Hardware/User_Timer/Include",
           "../Hardware/Variety/Include",
           "../Hardware/ADC/Include",
-          "../Drivers/CMSIS/DSP/Include"
+          "../Drivers/CMSIS/DSP/Include",
+          "../Drivers/STM32H7xx_HAL_Driver/Inc"
         ],
         "libList": [],
         "defineList": [
